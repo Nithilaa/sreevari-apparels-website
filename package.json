@@ -1,0 +1,23 @@
+{
+  "name": "sreevari-apparels-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sreevari Apparels website: Express server, static front end and enquiry endpoint",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build:preview": "node scripts/build-preview.js",
+    "build:static": "node scripts/build-static.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "compression": "^1.8.2",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "multer": "^2.5.0",
+    "nodemailer": "^10.5.0"
+  }
+}

@@ -27,8 +27,13 @@ const html = fs
   .replace(/href="\/(about|manufacturing|products|sourcing|capabilities|contact)"/g, 'href="#page-$1"')
   .replace(/href="\/"/g, 'href="#"')
   .replace('<script src="js/vendor/lenis.min.js" defer></script>', '<script>window.SV_ROUTER = "hash";</script>\n<script src="js/vendor/lenis.min.js" defer></script>');
-fs.writeFileSync(htmlFile, html);
-fs.writeFileSync(path.join(OUT, "404.html"), html);
+// Add a version to the stylesheet and script addresses so browsers fetch new copies after each update
+const version = require("crypto").createHash("sha1").update(css);
+for (const f of ["content.js", "pages.js", "site.js"]) version.update(fs.readFileSync(path.join(OUT, "js", f)));
+const v = version.digest("hex").slice(0, 10);
+const versioned = html.replace(/(href="site\.css|src="js\/[^"]+\.js)"/g, `$1?v=${v}"`);
+fs.writeFileSync(htmlFile, versioned);
+fs.writeFileSync(path.join(OUT, "404.html"), versioned);
 fs.writeFileSync(path.join(OUT, ".nojekyll"), "");
 fs.rmSync(path.join(OUT, "robots.txt"), { force: true });
 console.log("dist/static written");

@@ -35,6 +35,8 @@ npm start          # http://localhost:3000
 | Enquiry form | Saves the enquiry and files, can email them | Opens WhatsApp with every answer filled in, ready to send. The file field is hidden; files are attached in the chat |
 | How it deploys | Any Node host | Automatically on every push to `main` (`.github/workflows/pages.yml`) |
 
+The link preview image is `public/images/share-card.jpg` (1200 × 630). With a custom domain, add `SITE_URL: https://your-domain/` under `env:` on the build step in the workflow so previews point to the right address.
+
 The GitHub Pages copy is built by `npm run build:static` into `dist/static/`. In the repository, **Settings → Pages → Source** must be set to **GitHub Actions**.
 
 ## Enquiry form

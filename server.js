@@ -44,7 +44,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 
 // Link previews (WhatsApp, LinkedIn) need the share image as a full address
 const withShareImage = (html, req) =>
-  html.replace('content="/images/share-card.jpg"', `content="${process.env.SITE_URL || `${req.protocol}://${req.get("host")}`}/images/share-card.jpg"`);
+  html.replaceAll('content="/images/share-card.jpg"', `content="${process.env.SITE_URL || `${req.protocol}://${req.get("host")}`}/images/share-card.jpg"`);
 
 app.get("/", (req, res) => res.set("Cache-Control", "no-cache").type("html").send(withShareImage(indexHtml(), req)));
 

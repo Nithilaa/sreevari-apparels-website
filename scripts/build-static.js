@@ -1,12 +1,17 @@
 /*
  * Builds dist/static/: a server-less copy of the site for static hosts such as GitHub Pages.
- * Differences from the Node server version:
- *   - asset paths are relative, so the site works under any sub-path (e.g. /repo-name/)
- *   - pages use hash links (#page-about) because there is no server to answer /about
- *   - the enquiry form hands off to WhatsApp (no upload endpoint on a static host)
+ *
+ * When the public address is known (SITE_URL, or GitHub Actions), every page gets its own
+ * folder and real address (/about/, /products/ ...), its own title and description, and a
+ * sitemap. Without an address (a plain local build) pages fall back to "#page-about" links,
+ * which work from any folder.
+ *
+ * The enquiry form hands off to WhatsApp, because a static host cannot receive uploads.
  */
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
+const PAGES = require("../pages-meta");
 const PUBLIC = path.join(__dirname, "..", "public");
 const OUT = path.join(__dirname, "..", "dist", "static");
 
@@ -14,6 +19,8 @@ const OUT = path.join(__dirname, "..", "dist", "static");
 // on GitHub Actions it is worked out from the repository name.
 const [owner, repo] = (process.env.GITHUB_REPOSITORY || "").split("/");
 const SITE = process.env.SITE_URL ? process.env.SITE_URL.replace(/\/?$/, "/") : owner ? `https://${owner.toLowerCase()}.github.io/${repo}/` : "";
+const BASE = SITE ? new URL(SITE).pathname : "";
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.cpSync(PUBLIC, OUT, { recursive: true });
@@ -24,24 +31,59 @@ const css = fs.readFileSync(path.join(OUT, "css", "site.css"), "utf8").replace(/
 fs.rmSync(path.join(OUT, "css"), { recursive: true });
 fs.writeFileSync(path.join(OUT, "site.css"), css);
 
-const htmlFile = path.join(OUT, "index.html");
-const html = fs
-  .readFileSync(htmlFile, "utf8")
+// A version in the stylesheet and script addresses makes browsers fetch new copies after each update
+const hash = crypto.createHash("sha1").update(css);
+for (const f of ["content.js", "pages.js", "site.js"]) hash.update(fs.readFileSync(path.join(OUT, "js", f)));
+const v = hash.digest("hex").slice(0, 10);
+
+const pageLink = (slug) => (SITE ? `${slug}/` : `#page-${slug}`);
+const template = fs
+  .readFileSync(path.join(OUT, "index.html"), "utf8")
   // Link previews (WhatsApp, LinkedIn, iMessage) need the share image as a full address
   .replaceAll('content="/images/share-card.jpg"', `content="${SITE}images/share-card.jpg"`)
-  .replace('<meta property="og:site_name"', `${SITE ? `<meta property="og:url" content="${SITE}">\n` : ""}<meta property="og:site_name"`)
   .replace('href="/css/site.css"', 'href="site.css"')
   .replace(/(href|src|content)="\/(js|images|fonts|favicon)/g, '$1="$2')
-  .replace(/href="\/(about|manufacturing|products|sourcing|capabilities|contact)"/g, 'href="#page-$1"')
-  .replace(/href="\/"/g, 'href="#"')
-  .replace('<script src="js/vendor/lenis.min.js" defer></script>', '<script>window.SV_ROUTER = "hash";</script>\n<script src="js/vendor/lenis.min.js" defer></script>');
-// Add a version to the stylesheet and script addresses so browsers fetch new copies after each update
-const version = require("crypto").createHash("sha1").update(css);
-for (const f of ["content.js", "pages.js", "site.js"]) version.update(fs.readFileSync(path.join(OUT, "js", f)));
-const v = version.digest("hex").slice(0, 10);
-const versioned = html.replace(/(href="site\.css|src="js\/[^"]+\.js)"/g, `$1?v=${v}"`);
-fs.writeFileSync(htmlFile, versioned);
-fs.writeFileSync(path.join(OUT, "404.html"), versioned);
+  .replace(/href="\/(about|manufacturing|products|sourcing|capabilities|contact)"/g, (m, slug) => `href="${pageLink(slug)}"`)
+  .replace(/href="\/"/g, SITE ? 'href="./"' : 'href="#"')
+  .replace(/(href="site\.css|src="js\/[^"]+\.js)"/g, `$1?v=${v}"`)
+  .replace(
+    '<script src="js/vendor/lenis.min.js',
+    `<script>${SITE ? `window.SV_BASE = ${JSON.stringify(BASE)};` : 'window.SV_ROUTER = "hash";'}</script>\n<script src="js/vendor/lenis.min.js`,
+  );
+
+function page(slug) {
+  const address = SITE + (slug ? slug + "/" : "");
+  let html = template;
+  if (SITE) {
+    // <base> keeps every relative link and image working from inside a page folder
+    html = html
+      .replace('<meta name="viewport"', `<base href="${BASE}">\n<link rel="canonical" href="${address}">\n<meta name="viewport"`)
+      .replace('<meta property="og:site_name"', `<meta property="og:url" content="${address}">\n<meta property="og:site_name"`);
+  }
+  if (slug) {
+    const [title, description] = PAGES[slug];
+    html = html
+      .replace(/<title>.*?<\/title>/, `<title>${esc(title)}</title>`)
+      .replace(/(<meta name="description" content=")[^"]*"/, `$1${esc(description)}"`)
+      .replace(/(<meta property="og:title" content=")[^"]*"/, `$1${esc(title)}"`)
+      .replace(/(<meta property="og:description" content=")[^"]*"/, `$1${esc(description)}"`);
+  }
+  return html;
+}
+
+fs.writeFileSync(path.join(OUT, "index.html"), page(""));
+fs.writeFileSync(path.join(OUT, "404.html"), page(""));
 fs.writeFileSync(path.join(OUT, ".nojekyll"), "");
-fs.rmSync(path.join(OUT, "robots.txt"), { force: true });
-console.log("dist/static written");
+
+if (SITE) {
+  for (const slug of Object.keys(PAGES)) {
+    fs.mkdirSync(path.join(OUT, slug));
+    fs.writeFileSync(path.join(OUT, slug, "index.html"), page(slug));
+  }
+  const urls = ["", ...Object.keys(PAGES)].map((s) => `<url><loc>${SITE}${s ? s + "/" : ""}</loc></url>`).join("");
+  fs.writeFileSync(path.join(OUT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`);
+  fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${SITE}sitemap.xml\n`);
+} else {
+  fs.rmSync(path.join(OUT, "robots.txt"), { force: true });
+}
+console.log(`dist/static written (${SITE ? "page addresses under " + SITE : "hash links, no site address set"})`);

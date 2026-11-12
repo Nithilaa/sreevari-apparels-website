@@ -10,6 +10,8 @@
   const fine = matchMedia("(pointer: fine)").matches;
   // The single-file preview build and file:// use hash routes; the server uses real paths.
   const HASH_MODE = window.SV_ROUTER === "hash" || location.protocol === "file:";
+  // Folder the site lives in. "/" on the Node server; "/repo-name/" on GitHub Pages.
+  const BASE = window.SV_BASE || "/";
   const PAGES = ["about", "manufacturing", "products", "sourcing", "capabilities", "contact"];
 
   /* ---------- Smooth scrolling (desktop only, off for reduced motion) ---------- */
@@ -179,7 +181,7 @@
       const h = location.hash.slice(1);
       return h.startsWith("page-") && PAGES.includes(h.slice(5)) ? h.slice(5) : "";
     }
-    const p = location.pathname.replace(/^\/+|\/+$/g, "");
+    const p = location.pathname.slice(BASE.length).replace(/index\.html$/, "").replace(/^\/+|\/+$/g, "");
     return PAGES.includes(p) ? p : "";
   }
 
@@ -196,7 +198,7 @@
     $("#enquire").hidden = $(".site").hidden = !(page === "" || page === "contact");
     document.title = SV.titles[page];
     $$("nav .links a, #mm a").forEach((a) => {
-      const on = page !== "" && a.getAttribute("href").replace(/^#page-|^\//, "") === page;
+      const on = page !== "" && a.getAttribute("href").replace(/^#page-|^\.?\/|\/$/g, "") === page;
       on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current");
     });
     closeMenu();
@@ -231,7 +233,8 @@
       if (location.hash === next || (!page && !currentPage())) render(anchor);
       else location.hash = next;
     } else {
-      history.pushState({}, "", "/" + page);
+      // Static hosts serve each page from its own folder, so those addresses end in "/"
+      history.pushState({}, "", BASE + (page && window.SV_BASE ? page + "/" : page));
       render(anchor);
     }
   }
@@ -256,9 +259,12 @@
       e.preventDefault();
       closeMenu();
       scrollToEl(el, true);
-    } else if (href === "/" || PAGES.includes(href.slice(1))) {
+    } else if (!/^(#|[a-z]+:)/i.test(href)) {
+      // "/about" on the server, "about/" on static hosts, "/" or "./" for home
+      const page = href.replace(/^\.?\//, "").replace(/\/$/, "");
+      if (page !== "" && !PAGES.includes(page)) return;
       e.preventDefault();
-      navigate(href.slice(1));
+      navigate(page);
     }
   });
 
@@ -400,6 +406,17 @@
     ready = true;
     observeReveals();
   }
+  if (!HASH_MODE)
+    addEventListener("hashchange", () => {
+      const old = (location.hash.match(/^#page-(\w+)$/) || [])[1];
+      if (PAGES.includes(old)) {
+        history.replaceState({}, "", BASE);
+        navigate(old);
+      }
+    });
+  // Older links used "#page-about"; send them to the page's real address
+  const legacy = (location.hash.match(/^#page-(\w+)$/) || [])[1];
+  if (!HASH_MODE && PAGES.includes(legacy)) history.replaceState({}, "", BASE + (window.SV_BASE ? legacy + "/" : legacy));
   render(HASH_MODE ? null : location.hash.slice(1));
   const pre = $("#pre");
   let seen = false;

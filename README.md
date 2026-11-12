@@ -31,7 +31,7 @@ npm start          # http://localhost:3000
 
 | | Node server (`npm start`) | GitHub Pages (static) |
 |---|---|---|
-| Page addresses | `/about`, `/products` | `#page-about`, `#page-products` |
+| Page addresses | `/about`, `/products` | `/about/`, `/products/` (each page is its own file, with its own title, description and sitemap entry) |
 | Enquiry form | Saves the enquiry and files, can email them | Opens WhatsApp with every answer filled in, ready to send. The file field is hidden; files are attached in the chat |
 | How it deploys | Any Node host | Automatically on every push to `main` (`.github/workflows/pages.yml`) |
 

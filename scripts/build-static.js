@@ -48,7 +48,7 @@ const template = fs
   .replace(/(href="site\.css|src="js\/[^"]+\.js)"/g, `$1?v=${v}"`)
   .replace(
     '<script src="js/vendor/lenis.min.js',
-    `<script>${SITE ? `window.SV_BASE = ${JSON.stringify(BASE)};` : 'window.SV_ROUTER = "hash";'}</script>\n<script src="js/vendor/lenis.min.js`,
+    `<script>window.SV_STATIC = true; ${SITE ? `window.SV_BASE = ${JSON.stringify(BASE)};` : 'window.SV_ROUTER = "hash";'}</script>\n<script src="js/vendor/lenis.min.js`,
   );
 
 function page(slug) {

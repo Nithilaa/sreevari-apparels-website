@@ -12,6 +12,8 @@
   const HASH_MODE = window.SV_ROUTER === "hash" || location.protocol === "file:";
   // Folder the site lives in. "/" on the Node server; "/repo-name/" on GitHub Pages.
   const BASE = window.SV_BASE || "/";
+  // True when there is no server behind the site (GitHub Pages, the single-file preview): the form then sends through WhatsApp
+  const NO_SERVER = HASH_MODE || window.SV_STATIC === true;
   const PAGES = ["about", "manufacturing", "products", "sourcing", "capabilities", "contact"];
 
   /* ---------- Smooth scrolling (desktop only, off for reduced motion) ---------- */
@@ -361,7 +363,7 @@
   form.addEventListener("reset", () => setTimeout(syncOther));
 
   // Static hosting (GitHub Pages) has no server, so the form sends through WhatsApp
-  if (HASH_MODE) {
+  if (NO_SERVER) {
     $("#filesWrap").hidden = true;
     $("[name=Email]", form).required = false;
     submitBtn.textContent = "Send enquiry on WhatsApp";
@@ -378,7 +380,7 @@
       return say("Attach up to 5 files of 10 MB or less each.", "error");
 
     // Preview build has no server: hand the enquiry to WhatsApp instead.
-    if (HASH_MODE) {
+    if (NO_SERVER) {
       window.open(wa, "_blank", "noopener");
       return say("WhatsApp opened with your details. Press send there, and attach any files in the chat.", "ok");
     }

@@ -75,9 +75,17 @@ window.SV = {
     ["1993", "Established in Coimbatore", "Sreevari Apparels begins manufacturing in Tamil Nadu."],
     ["Woven focus", "Specialised knowledge", "A focused understanding of woven fabrics, construction and finishing."],
     ["Own facility", "Made in Irugur", "120+ sewing machines and approximately 1,500–2,000 pieces per day."],
+    ["Compliance", "SEDEX compliant", "Our facility operates against the SMETA 4-Pillar standard and audit requirements."],
     ["Partner network", "Wider possibility", "Knitwear, home textiles and fabrics sourced through partners across India."],
     ["One contact", "Shravan J.", "A dedicated point of contact from enquiry to shipment."],
   ],
+
+  // Wording supplied by the company. The four pillars are the areas a SMETA 4-Pillar audit covers.
+  compliance: {
+    headline: ["SEDEX compliant.", "SMETA 4-Pillar."],
+    text: "Our manufacturing facility is SEDEX compliant and operates against the SMETA 4-Pillar standard and audit requirements.",
+    pillars: ["Labour standards", "Health and safety", "Environment", "Business ethics"],
+  },
 
   capabilities: [
     "Fabric sourcing and approval",

@@ -27,6 +27,11 @@
       .map((x) => `<div class="fade"><span class="mono">${x[0]}</span><div><h3 class="serif">${x[1]}</h3><p>${x[2]}</p></div></div>`)
       .join("")}</div>`;
 
+  const compliance = () =>
+    `<section class="dark comp rv"><span class="mono fade kicker">Compliance</span>${lines(SV.compliance.headline, "h2")}<p class="fade lead" style="--i:2">${SV.compliance.text}</p><div class="pillars">${SV.compliance.pillars
+      .map((x, i) => `<div class="fade" style="--i:${i + 3}"><b class="serif">${["I", "II", "III", "IV"][i]}</b><i aria-hidden="true"></i><span class="mono">${x}</span></div>`)
+      .join("")}</div><p class="mono fade pnote" style="--i:7">The four pillars of a SMETA audit</p></section>`;
+
   const P = {};
 
   P.about =
@@ -38,6 +43,7 @@
   P.manufacturing =
     header("Manufacturing · Coimbatore", ["Where fabric", "becomes form."]) +
     `<section class="rv"><div class="stats fade"><div><b class="serif">120+</b><span class="mono">Sewing machines</span></div><div><b class="serif">1,500–2,000</b><span class="mono">Pieces per day, approximately</span></div></div></section>` +
+    compliance() +
     `<section>${SV.manufacturing.map((m, i) => row(i, m[0], m[1], m[2])).join("")}</section>`;
 
   P.products =
@@ -72,6 +78,7 @@
     `<section class="rv"><div class="caps">${SV.capabilities
       .map((c, i) => `<div class="fade"><span class="mono kicker">CAP-${pad(i + 1)}</span><h3 class="serif">${c}</h3></div>`)
       .join("")}</div></section>` +
+    compliance() +
     `<section class="rv"><div class="duo">${img(30, "A pallet of sealed cartons with generic markings, ready for dispatch", "ls")}${img(29, "Garments laid out on a table being checked by hand")}</div></section>`;
 
   P.contact =

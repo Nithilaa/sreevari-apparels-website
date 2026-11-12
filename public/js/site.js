@@ -274,6 +274,7 @@
   function preselect(category, route) {
     $("#cat").value = category;
     $("#rt").value = route;
+    $("#cat").dispatchEvent(new Event("change"));
   }
   document.addEventListener("click", (e) => {
     const b = e.target.closest(".enq");
@@ -329,16 +330,42 @@
     msg.innerHTML = html;
     msg.dataset.state = state;
   };
+  const LABELS = {
+    Name: "Name", Company: "Company", Email: "Email", Phone: "Phone / WhatsApp", Country: "Country",
+    Category: "Product category", Route: "Manufacturing or sourcing", Quantity: "Estimated quantity",
+    Market: "Target market", Description: "Project description",
+  };
   function whatsappLink(fd) {
-    let text = "New project enquiry — Sreevari Apparels\n";
-    fd.forEach((v, k) => {
-      if (typeof v === "string" && v.trim() && k !== "website") text += `${k}: ${v}\n`;
-    });
+    let text = "*New project enquiry — Sreevari Apparels*\n\n";
+    for (const key in LABELS) {
+      const v = String(fd.get(key) || "").trim();
+      if (v) text += `*${LABELS[key]}:* ${v}\n`;
+    }
     return `https://wa.me/${SV.whatsapp}?text=${encodeURIComponent(text)}`;
+  }
+
+  // "Other" in the category list reveals a box to type the product
+  const cat = $("#cat"), otherWrap = $("#catOtherWrap"), other = $("#catOther");
+  function syncOther() {
+    const on = cat.value === "Other";
+    otherWrap.hidden = !on;
+    other.required = on;
+  }
+  cat.addEventListener("change", syncOther);
+  form.addEventListener("reset", () => setTimeout(syncOther));
+
+  // Static hosting (GitHub Pages) has no server, so the form sends through WhatsApp
+  if (HASH_MODE) {
+    $("#filesWrap").hidden = true;
+    $("[name=Email]", form).required = false;
+    submitBtn.textContent = "Send enquiry on WhatsApp";
+    $("a.btn", form).hidden = true;
+    msg.textContent = "Your details open in WhatsApp, ready to send. Attach tech packs or photos in the chat.";
   }
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const fd = new FormData(form);
+    if (cat.value === "Other") fd.set("Category", "Other: " + other.value.trim());
     const wa = whatsappLink(fd);
     const files = fd.getAll("files").filter((f) => f && f.size);
     if (files.length > 5 || files.some((f) => f.size > 10 * 1024 * 1024))
@@ -347,7 +374,7 @@
     // Preview build has no server: hand the enquiry to WhatsApp instead.
     if (HASH_MODE) {
       window.open(wa, "_blank", "noopener");
-      return say("WhatsApp opened with your details. Attach any files in the chat.", "ok");
+      return say("WhatsApp opened with your details. Press send there, and attach any files in the chat.", "ok");
     }
 
     submitBtn.disabled = true;

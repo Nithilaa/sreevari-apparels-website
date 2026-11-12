@@ -98,12 +98,13 @@
 <label><span class="mono">Email</span><input name="Email" type="email" required autocomplete="email"></label>
 <label><span class="mono">Phone / WhatsApp</span><input name="Phone" type="tel" autocomplete="tel"></label>
 <label class="w"><span class="mono">Country</span><input name="Country" autocomplete="country-name"></label>
-<label><span class="mono">Product category</span><select name="Category" id="cat"><option>Shirts</option><option>Trousers</option><option>Jackets</option><option>Uniforms</option><option>Workwear</option><option>Knitted Garments</option><option>Home Textiles</option><option>Fabrics</option></select></label>
+<label><span class="mono">Product category</span><select name="Category" id="cat"><option>Shirts</option><option>Trousers</option><option>Jackets</option><option>Uniforms</option><option>Workwear</option><option>Knitted Garments</option><option>Home Textiles</option><option>Fabrics</option><option>Other</option></select></label>
+<label class="w" id="catOtherWrap" hidden><span class="mono">Tell us the product</span><input id="catOther" autocomplete="off" placeholder="Type the product you need"></label>
 <label><span class="mono">Manufacturing or sourcing</span><select name="Route" id="rt"><option>Manufacturing</option><option>Sourcing</option><option>Not sure yet</option></select></label>
 <label><span class="mono">Estimated quantity</span><input name="Quantity"></label>
 <label><span class="mono">Target market</span><input name="Market"></label>
 <label class="w"><span class="mono">Project description</span><textarea name="Description" rows="3"></textarea></label>
-<label class="w"><span class="mono">Reference / tech pack (PDF or images)</span><input type="file" name="files" accept=".pdf,image/*" multiple></label>
+<label class="w" id="filesWrap"><span class="mono">Reference / tech pack (PDF or images)</span><input type="file" name="files" accept=".pdf,image/*" multiple></label>
 <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
 <div class="w ctas"><button class="btn fill mono" type="submit">Start your project</button><a class="btn mono" href="https://wa.me/918072544030" target="_blank" rel="noopener">WhatsApp us</a></div>
 <p class="w note" id="fmsg" role="status" aria-live="polite">Up to 5 files, 10 MB each. PDF or images.</p>

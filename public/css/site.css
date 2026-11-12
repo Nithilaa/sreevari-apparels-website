@@ -2386,3 +2386,11 @@ footer .logo-tile img {
     padding-bottom: 78px;
   }
 }
+
+label[hidden],
+form .btn[hidden] {
+  display: none;
+}
+input::placeholder {
+  color: rgba(244, 245, 247, 0.4);
+}

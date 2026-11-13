@@ -53,6 +53,10 @@ The GitHub Pages copy is built by `npm run build:static` into `dist/static/`. In
 
 `data/` holds customer details. Keep it out of version control (it is in `.gitignore`) and back it up.
 
+## Signature
+
+Shravan's signature in `public/index.html` is an inline SVG of single pen lines, generated from the EMS Allure single-stroke font (a derivative of Allura; SIL Open Font License). To use his real signature, replace the `<path>` elements with paths traced from it, in writing order, keeping the `--t` (start) and `--d` (duration) values on each.
+
 ## Colours
 
 The palette follows the logo: blue `#0337B0`, grey `#A9ACB3`, navy `#0B1B4A` for dark sections and light grey `#E3E5EB` for the page background (it matches the backdrop of the product photos, so new product shots should use the same backdrop). The colour variables are at the top of `public/css/site.css` (they keep their original names: `--ivory`, `--forest`, `--sage`, `--umber`, `--ink`). The site uses one fixed theme and does not switch with the visitor's dark-mode setting.

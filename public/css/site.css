@@ -1,10 +1,5 @@
 /* Self-hosted fonts */
 @font-face {
-  font-family: "Signature";
-  src: url(/fonts/mrs-saint-delafield-latin-400-normal.woff2) format("woff2");
-  font-display: swap;
-}
-@font-face {
   font-family: "Instrument Serif";
   src: url(/fonts/instrument-serif-latin-400-normal.woff2) format("woff2");
   font-weight: 400;
@@ -4309,45 +4304,49 @@ header.hero {
   }
 }
 
-/* ==================== Shravan's name, written as a signature ==================== */
+/* ==================== Shravan's signature ====================
+   Each letter is a single pen line (EMS Allure, SIL Open Font License), drawn in writing order.
+   It is written once, when the letter first comes into view, and stays written. */
 .sig {
-  display: inline-block;
-  font-family: "Signature", "Instrument Serif", cursive;
-  font-size: clamp(64px, 6.4vw, 104px);
-  line-height: 1.15;
-  color: #0337b0;
-  padding: 0 0.3em 0 0.08em;
-  margin: -0.12em 0 -0.2em -0.08em;
-  white-space: nowrap;
+  display: block;
+  width: min(100%, 330px);
+  height: auto;
+  overflow: visible;
+  margin: 26px 0 8px -6px;
 }
-.sig.sm {
-  font-size: 46px;
-  color: var(--ivory);
-  margin: -8px 0 -6px -3px;
+.sig path {
+  fill: none;
+  stroke: #0337b0;
+  stroke-width: 2.3px;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-/* written once, left to right, when the letter first comes into view; it never plays again */
-.letter .sig {
-  clip-path: inset(-10% 100% -10% 0);
-  transition: clip-path 1.9s cubic-bezier(0.45, 0.05, 0.35, 1) 0.7s;
+.letter .sig path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
 }
-.letter.in .sig {
-  clip-path: inset(-10% 0 -10% 0);
+.letter.in .sig path {
+  animation: sign var(--d) cubic-bezier(0.4, 0.1, 0.4, 1) calc(var(--t) + 0.8s) forwards;
 }
-.sign i {
-  transition-delay: 2.3s;
-  margin-top: 4px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .letter .sig {
-    clip-path: none;
-    transition: none;
+@keyframes sign {
+  to {
+    stroke-dashoffset: 0;
   }
 }
-/* the stitched underline crossed the signature's tail, so the signature stands alone */
+.sign {
+  margin: 0 0 26px;
+}
 .sign i {
   display: none;
 }
 .sign .mono {
   display: block;
-  margin-top: 6px;
+  color: #5d6370;
+}
+@media (prefers-reduced-motion: reduce) {
+  .letter .sig path {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
 }

@@ -4305,29 +4305,29 @@ header.hero {
 }
 
 /* ==================== Shravan's signature ====================
-   Each letter is a single pen line (EMS Allure, SIL Open Font License), drawn in writing order.
-   It is written once, when the letter first comes into view, and stays written. */
+   The lettering is Mrs Saint Delafield (SIL Open Font License), stored as an outline.
+   A mask of pen strokes, traced along the centre of the letters in writing order, uncovers it,
+   so it appears as it would under a pen. It is written once and stays written. */
 .sig {
   display: block;
-  width: min(100%, 330px);
+  width: min(100%, 360px);
   height: auto;
   overflow: visible;
-  margin: 26px 0 8px -6px;
+  margin: 18px 0 2px -8px;
 }
-.sig path {
+.sig .ink {
+  fill: #0337b0;
+}
+.sig .pen path {
   fill: none;
-  stroke: #0337b0;
-  stroke-width: 2.3px;
-  vector-effect: non-scaling-stroke;
+  stroke: #fff;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-.letter .sig path {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
 }
-.letter.in .sig path {
-  animation: sign var(--d) cubic-bezier(0.4, 0.1, 0.4, 1) calc(var(--t) + 0.8s) forwards;
+.letter.in .sig .pen path {
+  animation: sign var(--d) linear calc(var(--t) + 0.8s) forwards;
 }
 @keyframes sign {
   to {
@@ -4345,7 +4345,7 @@ header.hero {
   color: #5d6370;
 }
 @media (prefers-reduced-motion: reduce) {
-  .letter .sig path {
+  .sig .pen path {
     stroke-dashoffset: 0;
     animation: none;
   }

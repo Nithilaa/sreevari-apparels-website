@@ -55,7 +55,7 @@ The GitHub Pages copy is built by `npm run build:static` into `dist/static/`. In
 
 ## Signature
 
-Shravan's signature in `public/index.html` is an inline SVG of single pen lines, generated from the EMS Allure single-stroke font (a derivative of Allura; SIL Open Font License). To use his real signature, replace the `<path>` elements with paths traced from it, in writing order, keeping the `--t` (start) and `--d` (duration) values on each.
+Shravan's signature in `public/index.html` is an inline SVG: the name set in Mrs Saint Delafield (SIL Open Font License) as an outline, uncovered by a mask of pen strokes traced along the letters in writing order. It is written once when the letter comes into view. To use his real signature, replace the outline and the mask strokes with ones traced from it.
 
 ## Colours
 

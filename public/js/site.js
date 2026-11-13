@@ -400,7 +400,14 @@
       t: parseFloat(el.style.getPropertyValue("--t")) * 1000,
       d: parseFloat(el.style.getPropertyValue("--d")) * 1000,
     }));
-    const set = (ms) => pen.forEach((s) => (s.el.style.strokeDashoffset = 1 - clamp((ms - s.t) / s.d)));
+    // A stroke stays hidden until the pen reaches it. Some phone browsers draw a round dot at the
+    // start of a stroke that has not begun, which showed as stray dots ahead of the pen.
+    const set = (ms) =>
+      pen.forEach((s) => {
+        const k = clamp((ms - s.t) / s.d);
+        s.el.style.visibility = k > 0 ? "visible" : "hidden";
+        s.el.style.strokeDashoffset = 1 - k;
+      });
     const end = Math.max(...pen.map((s) => s.t + s.d));
     let signed = false;
     new IntersectionObserver(

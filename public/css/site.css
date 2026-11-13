@@ -4500,3 +4500,13 @@ header.hero {
     opacity: 1;
   }
 }
+
+/* strokes the pen has not reached yet are not drawn at all */
+.sig .pen path {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sig .pen path {
+    visibility: visible;
+  }
+}

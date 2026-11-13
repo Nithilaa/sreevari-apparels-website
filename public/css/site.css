@@ -1,5 +1,10 @@
 /* Self-hosted fonts */
 @font-face {
+  font-family: "Signature";
+  src: url(/fonts/mrs-saint-delafield-latin-400-normal.woff2) format("woff2");
+  font-display: swap;
+}
+@font-face {
   font-family: "Instrument Serif";
   src: url(/fonts/instrument-serif-latin-400-normal.woff2) format("woff2");
   font-weight: 400;
@@ -4302,4 +4307,47 @@ header.hero {
   #gsteps li.on p {
     max-height: 60px;
   }
+}
+
+/* ==================== Shravan's name, written as a signature ==================== */
+.sig {
+  display: inline-block;
+  font-family: "Signature", "Instrument Serif", cursive;
+  font-size: clamp(64px, 6.4vw, 104px);
+  line-height: 1.15;
+  color: #0337b0;
+  padding: 0 0.3em 0 0.08em;
+  margin: -0.12em 0 -0.2em -0.08em;
+  white-space: nowrap;
+}
+.sig.sm {
+  font-size: 46px;
+  color: var(--ivory);
+  margin: -8px 0 -6px -3px;
+}
+/* written once, left to right, when the letter first comes into view; it never plays again */
+.letter .sig {
+  clip-path: inset(-10% 100% -10% 0);
+  transition: clip-path 1.9s cubic-bezier(0.45, 0.05, 0.35, 1) 0.7s;
+}
+.letter.in .sig {
+  clip-path: inset(-10% 0 -10% 0);
+}
+.sign i {
+  transition-delay: 2.3s;
+  margin-top: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .letter .sig {
+    clip-path: none;
+    transition: none;
+  }
+}
+/* the stitched underline crossed the signature's tail, so the signature stands alone */
+.sign i {
+  display: none;
+}
+.sign .mono {
+  display: block;
+  margin-top: 6px;
 }

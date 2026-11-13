@@ -60,18 +60,17 @@
   const observeReveals = () => $$(".rv:not(.in)").forEach((e) => io.observe(e));
 
   /* ---------- Homepage: the shirt that comes together (drawn in garment.js) ----------
-     It plays by itself once it is on screen, one step at a time. Clicking a step jumps to it.
+     It plays by itself, on a loop, while it is on screen. Clicking a step jumps to it.
      Nothing here depends on scroll position, so the page scrolls normally past it. */
   const gSteps = $$("#gsteps li"),
-    gNames = gSteps.map((li) => $("b", li).textContent),
-    gBtn = $("#gplay");
+    gNames = gSteps.map((li) => $("b", li).textContent);
+
   const G_STOPS = [0.19, 0.39, 0.62, 0.78, 0.97]; // where each step's drawing is complete
   let gP = 0,
     gStep = -1,
     gAnim = 0,
     gTimer = 0,
-    gPlaying = false,
-    gSeen = false;
+    gPlaying = false;
   function gMark(i) {
     gStep = i;
     gSteps.forEach((li, k) => {
@@ -99,48 +98,37 @@
     };
     gAnim = requestAnimationFrame(tick);
   }
-  function gLabel() {
-    const done = !gPlaying && gStep === G_STOPS.length - 1;
-    gBtn.textContent = gPlaying ? "Pause" : done ? "Replay" : "Play";
-  }
-  function gPlay() {
-    gPlaying = true;
-    gLabel();
-    const next = () => {
-      if (!gPlaying) return;
-      if (gStep >= G_STOPS.length - 1) return ((gPlaying = false), gLabel());
-      gGo(gStep + 1, () => (gTimer = setTimeout(next, 450)));
-    };
-    next();
-  }
-  function gStop() {
-    gPlaying = false;
-    clearTimeout(gTimer);
-    gLabel();
-  }
-  gBtn.addEventListener("click", () => {
-    if (gPlaying) return gStop();
+  // Plays on a loop while the section is on screen. Picking a step holds it there for a few seconds, then the loop carries on.
+  function gNext() {
+    if (!gPlaying) return;
     if (gStep >= G_STOPS.length - 1) {
       gP = 0;
       gStep = -1;
       SV.garment.update(0);
     }
-    gPlay();
-  });
+    gGo(gStep + 1, () => (gTimer = setTimeout(gNext, gStep === G_STOPS.length - 1 ? 2200 : 450)));
+  }
+  function gPlay() {
+    if (gPlaying || reduced) return;
+    gPlaying = true;
+    gNext();
+  }
+  function gStop() {
+    gPlaying = false;
+    cancelAnimationFrame(gAnim);
+    clearTimeout(gTimer);
+  }
   gSteps.forEach((li, k) => {
-    const pick = () => (gStop(), gGo(k, null, true), gLabel());
+    const pick = () => {
+      gStop();
+      gGo(k, null, true);
+      if (!reduced) gTimer = setTimeout(gPlay, 4000);
+    };
     li.addEventListener("click", pick);
     li.addEventListener("keydown", (e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), pick()));
   });
-  new IntersectionObserver(
-    ([e]) => {
-      if (e.isIntersecting && !gSeen) {
-        gSeen = true;
-        reduced ? (gGo(G_STOPS.length - 1), gLabel()) : gPlay();
-      } else if (!e.isIntersecting && gPlaying) gStop(); // no point animating off screen
-    },
-    { threshold: 0.45 },
-  ).observe($(".gpanel"));
+  new IntersectionObserver(([e]) => (e.isIntersecting ? gPlay() : gStop()), { threshold: 0.4 }).observe($(".gpanel"));
+  if (reduced) gGo(G_STOPS.length - 1); // no motion: show the finished row of shirts
   gMark(0);
   gStep = -1; // nothing has played yet, so Play starts with step one
 

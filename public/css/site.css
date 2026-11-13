@@ -4351,3 +4351,160 @@ header.hero {
     animation: none;
   }
 }
+
+/* ==================== About: where we are ==================== */
+.where {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(24px, 5vw, 80px);
+  align-items: center;
+}
+.where h2 {
+  font-size: clamp(40px, 5.4vw, 92px);
+  margin: 12px 0 18px;
+}
+.where .wtext > p:not(.mono) {
+  max-width: 40ch;
+}
+.wlist {
+  list-style: none;
+  padding: 0;
+  margin: clamp(20px, 3vw, 36px) 0 16px;
+}
+.wlist li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 14px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid rgba(244, 245, 247, 0.16);
+}
+.wlist li:last-child {
+  border-bottom: 1px solid rgba(244, 245, 247, 0.16);
+}
+.wlist b {
+  font-weight: 400;
+}
+.wlist span {
+  color: var(--sage);
+  font-size: 14px;
+}
+.wlist em {
+  font:
+    400 13px "JetBrains Mono",
+    monospace;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  color: var(--blue-soft);
+  min-width: 62px;
+  text-align: right;
+}
+.wnote {
+  color: var(--sage);
+  font-size: 10px;
+  max-width: 52ch;
+}
+.wmap {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.wring {
+  fill: none;
+  stroke: rgba(244, 245, 247, 0.14);
+  stroke-dasharray: 3 7;
+}
+.wringt,
+.wnorth {
+  fill: var(--sage);
+  font:
+    13px "JetBrains Mono",
+    monospace;
+  letter-spacing: 1.5px;
+}
+.wnortha {
+  fill: none;
+  stroke: var(--sage);
+  stroke-width: 1.5;
+}
+.wplace line {
+  stroke: var(--blue-soft);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1s cubic-bezier(0.2, 0.7, 0.1, 1) calc(var(--i) * 0.12s + 0.5s);
+}
+.wplace circle,
+.wplace text {
+  opacity: 0;
+  transition: opacity 0.5s calc(var(--i) * 0.12s + 1.2s);
+}
+.wplace circle {
+  fill: var(--blue-soft);
+}
+.wplace text {
+  fill: var(--ivory);
+  font:
+    17px Manrope,
+    sans-serif;
+}
+.where.in .wplace line {
+  stroke-dashoffset: 0;
+}
+.where.in .wplace circle,
+.where.in .wplace text {
+  opacity: 1;
+}
+.whub {
+  fill: var(--ivory);
+}
+.whubt {
+  fill: var(--ivory);
+  font:
+    13px "JetBrains Mono",
+    monospace;
+  letter-spacing: 3px;
+}
+.wpulse {
+  fill: none;
+  stroke: var(--ivory);
+  stroke-width: 1.5;
+  transform-origin: 400px 300px;
+  animation: wpulse 2.8s ease-out infinite;
+}
+@keyframes wpulse {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+@media (max-width: 900px) {
+  .where {
+    grid-template-columns: 1fr;
+  }
+  .wplace text {
+    font-size: 22px;
+  }
+  .wringt,
+  .wnorth,
+  .whubt {
+    font-size: 17px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wpulse {
+    animation: none;
+    opacity: 0;
+  }
+  .wplace line {
+    stroke-dashoffset: 0;
+  }
+  .wplace circle,
+  .wplace text {
+    opacity: 1;
+  }
+}

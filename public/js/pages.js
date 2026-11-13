@@ -36,6 +36,50 @@
   const P = {};
 
   /* ---------- About ---------- */
+  // The map: true compass directions from the factory, with distance on a compressed scale so that
+  // a place 3 km away and one 400 km away both fit. Distances are straight lines between coordinates.
+  const rad = (d) => (d * Math.PI) / 180;
+  const F = SV.factory;
+  const places = SV.places.map(([name, what, lat, lon]) => {
+    const dLat = rad(lat - F.lat),
+      dLon = rad(lon - F.lon);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(F.lat)) * Math.cos(rad(lat)) * Math.sin(dLon / 2) ** 2;
+    const km = 2 * 6371 * Math.asin(Math.sqrt(h));
+    const bearing = Math.atan2(
+      Math.sin(dLon) * Math.cos(rad(lat)),
+      Math.cos(rad(F.lat)) * Math.sin(rad(lat)) - Math.sin(rad(F.lat)) * Math.cos(rad(lat)) * Math.cos(dLon),
+    );
+    return {
+      name,
+      what,
+      km: km < 10 ? Math.round(km) : Math.round(km / (km < 100 ? 1 : 5)) * (km < 100 ? 1 : 5),
+      bearing,
+      raw: km,
+    };
+  });
+  const CX = 400,
+    CY = 300,
+    ring = (km) => 2 + 113 * Math.log10(km);
+  const mapSvg = `<svg class="wmap" viewBox="0 -22 860 648" role="img" aria-label="Diagram of places around the factory in Irugur, with compass directions and straight-line distances">${[
+    10, 100, 400,
+  ]
+    .map(
+      (k) =>
+        `<circle class="wring" cx="${CX}" cy="${CY}" r="${ring(k)}"/><text class="wringt" x="${CX}" y="${CY - ring(k) - 6}" text-anchor="middle">${k} km</text>`,
+    )
+    .join("")}${places
+    .map((p, i) => {
+      const r = ring(p.raw),
+        x = CX + r * Math.sin(p.bearing),
+        y = CY - r * Math.cos(p.bearing);
+      const left = x < CX;
+      return `<g class="wplace" style="--i:${i}"><line pathLength="1" x1="${CX}" y1="${CY}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6"/><text x="${(x + (left ? -13 : 13)).toFixed(1)}" y="${(y + 6).toFixed(1)}" text-anchor="${left ? "end" : "start"}">${p.name} · ${p.km} km</text></g>`;
+    })
+    .join(
+      "",
+    )}<circle class="wpulse" cx="${CX}" cy="${CY}" r="12"/><circle class="whub" cx="${CX}" cy="${CY}" r="9"/><text class="whubt" x="${CX}" y="${CY + 34}" text-anchor="middle">IRUGUR</text><text class="wnorth" x="822" y="40" text-anchor="middle">N</text><path class="wnortha" d="M822 96 L822 52 M814 64 L822 52 L830 64"/></svg>`;
+
+  /* ---------- About: who we are, where we are, who you talk to ---------- */
   P.about =
     cover(
       "About · Est. 1993",
@@ -43,13 +87,16 @@
       21,
       "Exterior of the Sreevari facility in Irugur, Coimbatore",
     ) +
-    `<section class="intro rv"><div><p class="fade lead">Sreevari Apparels Private Limited was established in 1993 in Coimbatore, Tamil Nadu. We specialise in woven garments made in our own facility in Irugur, and we source knitwear, home textiles and fabrics through a manufacturing partner network across India.</p><p class="fade" style="--i:1">Development begins with whatever a buyer has: a sketch, tech pack, reference or sample. We build to approved samples and buyer specifications.</p></div>${img(37, "Finished shirts in white, light blue and navy on a rail, with folded stacks on a table", "ls")}</section>` +
-    `<section class="dark story"><div class="rv">${lines(["The business,", "plainly."], "h2")}</div><div class="thread" data-track><i class="rail" aria-hidden="true"><b></b></i>${SV.aboutTimeline
+    `<section class="intro rv"><div><p class="fade lead">Sreevari Apparels Private Limited has made woven garments in its own facility in Coimbatore, Tamil Nadu since 1993. We also source knitwear, home textiles and fabrics through manufacturing partners across India.</p><p class="fade" style="--i:1">Development begins with whatever a buyer has: a sketch, tech pack, reference or sample. We build to approved samples and buyer specifications.</p></div>${img(37, "Finished shirts in white, light blue and navy on a rail, with folded stacks on a table", "ls")}</section>` +
+    `<section class="dark where rv"><div class="wtext"><span class="mono fade kicker">Irugur, Coimbatore</span>${lines(["Where we are."], "h2")}<p class="fade" style="--i:1">Our facility is in Irugur, on the eastern side of Coimbatore in Tamil Nadu.</p><ol class="wlist">${places
       .map(
-        (x) =>
-          `<div class="knot rv"><span class="dot" aria-hidden="true"></span><span class="mono fade">${x[0]}</span><h3 class="serif fade">${x[1]}</h3><p class="fade" style="--i:1">${x[2]}</p></div>`,
+        (p, i) =>
+          `<li class="fade" style="--i:${i + 2}"><b>${p.name}</b><span>${p.what}</span><em>${p.km} km</em></li>`,
       )
-      .join("")}</div></section>`;
+      .join(
+        "",
+      )}</ol><p class="mono wnote fade" style="--i:10">Straight-line distances from the factory, rounded. Road distances are longer. On the diagram, directions are true and distance is compressed.</p></div>${mapSvg}</section>` +
+    `<div id="shravan-slot"></div>`;
 
   /* ---------- Manufacturing: the photo stays put while the seven stages scroll past it ---------- */
   P.manufacturing =
@@ -131,4 +178,6 @@
   P.contact = `<section class="rv pghead chead"><span class="mono fade kicker">Contact</span>${lines(["Let’s make", "something real."])}<p class="fade lead sub" style="--i:3">Tell us what you’re looking to manufacture or source.</p></section>`;
 
   for (const k in P) document.getElementById("page-" + k).innerHTML = P[k];
+  // The Meet Shravan letter is written once in index.html and lives on the About page
+  document.getElementById("shravan-slot").replaceWith(document.getElementById("shravan"));
 })();

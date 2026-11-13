@@ -257,7 +257,6 @@
     $$("main").forEach((m) => (m.hidden = m.id !== (page ? "page-" + page : "home")));
     // The enquiry form and the facility photo close the homepage and the Contact page only
     $("#enquire").hidden = !(page === "" || page === "contact");
-    $("#shravan").hidden = page !== "";
     document.title = SV.titles[page];
     $$("nav .links a, #mm a").forEach((a) => {
       const on = page !== "" && a.getAttribute("href").replace(/^#page-|^\.?\/|\/$/g, "") === page;

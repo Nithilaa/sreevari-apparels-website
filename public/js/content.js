@@ -83,18 +83,18 @@ window.SV = {
     [17, "Fabric sourcing", "Fabrics sourced to specification."],
   ],
 
-  aboutTimeline: [
-    ["1993", "Established in Coimbatore", "Sreevari Apparels begins manufacturing woven garments in Tamil Nadu."],
-    [
-      "Own facility",
-      "Made in Irugur",
-      "Woven garments are produced in our own facility, to approved samples and buyer specifications.",
-    ],
-    [
-      "Partner network",
-      "Wider possibility",
-      "Knitwear, home textiles and fabrics are sourced through manufacturing partners across India.",
-    ],
+  // About page map. Distances are worked out from these coordinates as straight lines, so they are
+  // shorter than the road distance. The factory position is the pin on the company's Google Maps listing.
+  factory: { name: "Irugur", lat: 11.0116777, lon: 77.065827 },
+  places: [
+    ["Coimbatore Airport", "Airport", 11.03, 77.0434],
+    ["Coimbatore city", "City centre", 11.0168, 76.9558],
+    ["Tiruppur", "Knitwear", 11.1085, 77.3411],
+    ["Erode", "Textile market", 11.341, 77.7172],
+    ["Karur", "Home textiles", 10.9601, 78.0766],
+    ["Kochi", "Seaport", 9.9667, 76.2667],
+    ["Thoothukudi", "Seaport", 8.7642, 78.1348],
+    ["Chennai", "Seaport", 13.09, 80.295],
   ],
 
   // Wording supplied by the company. The four pillars are the areas a SMETA 4-Pillar audit covers.

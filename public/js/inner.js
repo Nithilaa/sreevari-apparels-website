@@ -62,6 +62,39 @@
     paint();
   }
 
+  /* ---------- Products: the range. Hover or tap a category to bring it onto the stage ---------- */
+  const showItems = $$(".showlist li"),
+    showImgs = $$(".showimg");
+  function showProduct(i, toggle) {
+    showItems.forEach((li) => {
+      const open = +li.dataset.i === i && !(toggle && li.classList.contains("on"));
+      li.classList.toggle("on", open);
+      $("button", li).setAttribute("aria-expanded", String(open));
+    });
+    showImgs.forEach((im, k) => im.classList.toggle("on", k === i));
+    const p = SV.products[i],
+      card = $(".showcard");
+    $(".shownum").textContent = String(i + 1).padStart(2, "0");
+    $(".tag", card).textContent = p[2] ? "Manufactured by Sreevari" : "Sourced through partners";
+    $("h3", card).textContent = p[0];
+    $("p", card).textContent = p[3];
+    const b = $(".enq", card);
+    b.textContent = "Enquire about " + p[0].toLowerCase();
+    b.dataset.cat = p[0];
+    b.dataset.route = p[2] ? "Manufacturing" : "Sourcing";
+    card.classList.remove("swap");
+    void card.offsetWidth;
+    card.classList.add("swap");
+  }
+  showItems.forEach((li) => {
+    const i = +li.dataset.i,
+      btn = li.firstElementChild;
+    btn.addEventListener("click", () => showProduct(i, !wide.matches));
+    li.addEventListener("mouseenter", () => wide.matches && showProduct(i));
+    btn.addEventListener("focus", () => wide.matches && showProduct(i));
+  });
+  if (showItems.length) showProduct(0);
+
   /* ---------- Scroll-linked pieces: Manufacturing stages and the About thread ---------- */
   const lineItems = $$(".linelist li"),
     linePics = $$(".linepic > div");

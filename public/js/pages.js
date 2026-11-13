@@ -15,6 +15,10 @@
   const header = (kicker, headline, media = "", sub = "") =>
     `<section class="rv pghead ${media ? "has" : ""}"><div><span class="mono fade kicker">${kicker}</span>${lines(headline)}${sub ? `<p class="fade lead sub" style="--i:3">${sub}</p>` : ""}</div>${media}</section>`;
 
+  // Page opening as a full-width picture with the headline set over it, aligned to the page margins
+  const cover = (kicker, headline, n, alt) =>
+    `<section class="rv pghead cover dark"><div class="cbg" role="img" aria-label="${alt}" style="background-image:var(--im${n})"></div><div class="ctext"><span class="mono fade kicker">${kicker}</span>${lines(headline)}</div></section>`;
+
   const row = (i, n, title, text, extra = "") => {
     const alt = "Illustrative photograph: " + title;
     const media = Array.isArray(n) ? `<div class="pair">${n.map((k) => img(k, alt)).join("")}</div>` : img(n, alt);
@@ -31,14 +35,15 @@
 
   const P = {};
 
-  /* ---------- About: a line that draws itself down the company's story ---------- */
+  /* ---------- About ---------- */
   P.about =
-    header(
+    cover(
       "About · Est. 1993",
       ["Three decades", "of understanding", "the garment."],
-      img(21, "Exterior of the Sreevari facility in Irugur, Coimbatore", "ls"),
+      21,
+      "Exterior of the Sreevari facility in Irugur, Coimbatore",
     ) +
-    `<section class="split rv"><div><p class="fade lead">Sreevari Apparels Private Limited was established in 1993 in Coimbatore, Tamil Nadu. We specialise in woven garments made in our own facility in Irugur, and we source knitwear, home textiles and fabrics through a manufacturing partner network across India.</p><p class="fade" style="margin-top:22px;--i:1">Development begins with whatever a buyer has: a sketch, tech pack, reference or sample. We build to approved samples and buyer specifications.</p></div>${img(37, "Finished shirts in white, light blue and navy on a rail, with folded stacks on a table")}</section>` +
+    `<section class="intro rv"><div><p class="fade lead">Sreevari Apparels Private Limited was established in 1993 in Coimbatore, Tamil Nadu. We specialise in woven garments made in our own facility in Irugur, and we source knitwear, home textiles and fabrics through a manufacturing partner network across India.</p><p class="fade" style="--i:1">Development begins with whatever a buyer has: a sketch, tech pack, reference or sample. We build to approved samples and buyer specifications.</p></div>${img(37, "Finished shirts in white, light blue and navy on a rail, with folded stacks on a table", "ls")}</section>` +
     `<section class="dark story"><div class="rv">${lines(["The business,", "plainly."], "h2")}</div><div class="thread" data-track><i class="rail" aria-hidden="true"><b></b></i>${SV.aboutTimeline
       .map(
         (x) =>
@@ -48,10 +53,11 @@
 
   /* ---------- Manufacturing: the photo stays put while the seven stages scroll past it ---------- */
   P.manufacturing =
-    header(
+    cover(
       "Manufacturing · Coimbatore",
       ["Where fabric", "becomes form."],
-      img(36, "Cutting tables in the foreground with sewing lines beyond", "ls"),
+      36,
+      "Cutting tables in the foreground with sewing lines beyond",
     ) +
     `<section class="line" data-track><div class="linepic" aria-hidden="true">${SV.stages
       .map((m) => `<div style="background-image:var(--im${m[3]})"></div>`)
@@ -65,25 +71,26 @@
       .join("")}</ol></section>` +
     compliance();
 
-  /* ---------- Products: a shirt you can recolour, then the categories ---------- */
+  /* ---------- Products: recolour a shirt, then browse the range ---------- */
+  const group = (made) =>
+    SV.products
+      .map((p, i) => [p, i])
+      .filter(([p]) => p[2] === made)
+      .map(([p, i]) => {
+        const n = Array.isArray(p[1]) ? p[1][0] : p[1];
+        const tag = made ? "Manufactured by Sreevari" : "Sourced through partners";
+        return `<li data-i="${i}"><button type="button" aria-expanded="false"><span class="mono">${pad(i + 1)}</span><b class="serif">${p[0]}</b></button><div class="showin"><div class="showph" role="img" aria-label="${p[0]}" style="background-image:var(--im${n})"></div><p>${p[3]}</p><button class="btn mono enq" data-cat="${p[0]}" data-route="${made ? "Manufacturing" : "Sourcing"}">Enquire about ${p[0].toLowerCase()}</button></div></li>`;
+      })
+      .join("");
   P.products =
-    header(
-      "Products",
-      ["Made to", "your specification."],
-      `<div class="config fade" id="config" style="--i:2"></div>`,
-    ) +
-    `<section>${SV.products
-      .map((p, i) =>
-        row(
-          i,
-          p[1],
-          p[0],
-          p[3],
-          `<span class="mono tag ${p[2] ? "" : "s"}">${p[2] ? "Manufactured by Sreevari" : "Sourced through partners"}</span>` +
-            `<button class="btn mono enq" data-cat="${p[0]}" data-route="${p[2] ? "Manufacturing" : "Sourcing"}">Enquire about this category</button>`,
-        ),
+    `<section class="rv pghead phead"><div><span class="mono fade kicker">Products</span>${lines(["Made to", "your specification."])}<p class="fade lead sub" style="--i:3">Change the colour, the weave and the pocket. Every garment we make starts from choices like these.</p></div><div class="config fade" id="config" style="--i:2"></div></section>` +
+    `<section class="dark show rv"><div class="showlist"><h2 class="serif">${`<span class="l"><span>The range.</span></span>`}</h2><span class="mono showtag">Manufactured by Sreevari</span><ol>${group(true)}</ol><span class="mono showtag s">Sourced through partners</span><ol>${group(false)}</ol></div><div class="showstage" aria-live="polite"><span class="shownum serif" aria-hidden="true"></span>${SV.products
+      .map(
+        (p) => `<div class="showimg" style="background-image:var(--im${Array.isArray(p[1]) ? p[1][0] : p[1]})"></div>`,
       )
-      .join("")}</section>`;
+      .join(
+        "",
+      )}<div class="showcard"><span class="mono tag"></span><h3 class="serif"></h3><p></p><button class="btn mono enq">Enquire</button></div></div></section>`;
 
   /* ---------- Sourcing: a network with enquiries travelling along it ---------- */
   // Abstract diagram only. Node positions are decorative, not partner locations.
@@ -99,12 +106,13 @@
     [250, 120],
   ];
   P.sourcing =
-    header(
+    cover(
       "Sourcing",
       ["India. A network", "of possibility."],
-      img(27, "Fabric rolls in white, grey, light blue and navy stacked on shelves", "ls"),
+      27,
+      "Fabric rolls in white, grey, light blue and navy stacked on shelves",
     ) +
-    `<section class="split rv"><div><p class="fade lead">Sreevari sources knitwear, home textiles and fabrics through suitable manufacturing partners across India. We coordinate; our partners manufacture.</p><p class="fade" style="margin-top:22px">Woven garments remain a direct-manufacturing line, made in our own Coimbatore facility. Sourcing is a separate service, run through one point of contact.</p></div>${img(28, "Two people reviewing fabric swatches and a sample shirt at a table", "ls")}</section>` +
+    `<section class="intro rv"><div><p class="fade lead">Sreevari sources knitwear, home textiles and fabrics through suitable manufacturing partners across India. We coordinate; our partners manufacture.</p><p class="fade" style="--i:1">Woven garments remain a direct-manufacturing line, made in our own Coimbatore facility. Sourcing is a separate service, run through one point of contact.</p></div>${img(28, "Two people reviewing fabric swatches and a sample shirt at a table", "ls")}</section>` +
     `<section class="dark netsec rv"><svg class="net" viewBox="0 0 620 400" role="img" aria-label="Abstract network diagram: a central Sreevari node linked to unlabelled partner nodes">${nodes
       .map(
         (n, i) =>
@@ -116,16 +124,11 @@
     `<section class="rv"><div class="trio">${SV.sourcingLines
       .map(
         (m, i) =>
-          `<div class="fade" style="--i:${i}">${img(m[0], "Illustrative photograph: " + m[1])}<span class="mono kicker">${pad(i + 1)}</span><h3 class="serif">${m[1]}</h3><p>${m[2]}</p></div>`,
+          `<div class="fade" style="--i:${i}"><div class="tile" role="img" aria-label="Illustrative photograph: ${m[1]}" style="background-image:var(--im${m[0]})"></div><span class="mono kicker">${pad(i + 1)}</span><h3 class="serif">${m[1]}</h3><p>${m[2]}</p></div>`,
       )
       .join("")}</div></section>`;
 
-  P.contact = header(
-    "Contact",
-    ["Let’s make", "something", "real."],
-    img(38, "A light blue shirt laid flat with a tape measure, pattern paper and navy thread", "ls"),
-    "Tell us what you’re looking to manufacture or source.",
-  );
+  P.contact = `<section class="rv pghead chead"><span class="mono fade kicker">Contact</span>${lines(["Let’s make", "something real."])}<p class="fade lead sub" style="--i:3">Tell us what you’re looking to manufacture or source.</p></section>`;
 
   for (const k in P) document.getElementById("page-" + k).innerHTML = P[k];
 })();

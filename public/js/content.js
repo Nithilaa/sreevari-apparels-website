@@ -48,13 +48,7 @@ window.SV = {
       4,
       "Fabric laid out on a cutting table",
     ],
-    [
-      "Shirt construction",
-      "Sewing and garment assembly.",
-      "Construction",
-      3,
-      "An operator sewing a shirt at a machine",
-    ],
+    ["Construction", "Sewing and garment assembly.", "Construction", 3, "An operator sewing a shirt at a machine"],
     [
       "Quality inspection",
       "In-line checking and final AQL inspection.",

@@ -13,7 +13,7 @@ let css = read("css/site.css")
   .replace(/url\(\/images\/([^)]+\.webp)\)/g, (m, f) => `url(${dataUri("images/" + f, "image/webp")})`)
   .replace(/url\(\/fonts\/([^)]+\.woff2)\)/g, (m, f) => `url(${dataUri("fonts/" + f, "font/woff2")})`);
 
-const js = ["js/vendor/lenis.min.js", "js/content.js", "js/pages.js", "js/garment.js", "js/enquiry.js", "js/fabric.js", "js/site.js"]
+const js = ["js/vendor/lenis.min.js", "js/content.js", "js/pages.js", "js/garment.js", "js/enquiry.js", "js/site.js"]
   .map((f) => read(f).replace(/<\/script/g, "<\\/script"))
   .join("\n;\n");
 

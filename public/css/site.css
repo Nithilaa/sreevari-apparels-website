@@ -4327,14 +4327,6 @@ header.hero {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
 }
-.letter.in .sig .pen path {
-  animation: sign var(--d) linear calc(var(--t) + 0.8s) forwards;
-}
-@keyframes sign {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
 .sign {
   margin: 0 0 26px;
 }

@@ -390,6 +390,38 @@
     });
   }
 
+  /* ---------- Signature: written once, when the signature itself is on screen ----------
+     Driven frame by frame from script. The letter is tall on a phone, so waiting for the letter to appear
+     would start the pen before the signature is in view. */
+  const sig = $(".sig");
+  if (sig) {
+    const pen = $$(".pen path", sig).map((el) => ({
+      el,
+      t: parseFloat(el.style.getPropertyValue("--t")) * 1000,
+      d: parseFloat(el.style.getPropertyValue("--d")) * 1000,
+    }));
+    const set = (ms) => pen.forEach((s) => (s.el.style.strokeDashoffset = 1 - clamp((ms - s.t) / s.d)));
+    const end = Math.max(...pen.map((s) => s.t + s.d));
+    let signed = false;
+    new IntersectionObserver(
+      ([e], obs) => {
+        if (!e.isIntersecting || signed) return;
+        signed = true;
+        obs.disconnect();
+        if (reduced) return set(end);
+        let t0 = 0;
+        const step = (now) => {
+          t0 = t0 || now + 350; // a short pause before the pen touches down
+          set(now - t0);
+          if (now - t0 < end) requestAnimationFrame(step);
+          else set(end);
+        };
+        requestAnimationFrame(step);
+      },
+      { threshold: 0.9 },
+    ).observe(sig);
+  }
+
   /* ---------- Intro, then start ---------- */
   function start() {
     document.documentElement.classList.add("ready");

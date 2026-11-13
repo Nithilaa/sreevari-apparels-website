@@ -210,31 +210,19 @@
   // Colours come from the --fab / --fab2 / --stripe variables on the <svg>; data-pattern picks the weave.
   window.SV.shirtMarkup = () => {
     const part = (id) => PIECES.find((x) => x[0] === id)[1];
-    const cloth = (d, cls = "") => `<path class="c ${cls}" d="${d}"/>`;
-    const seam = (d) => `<path class="cs" d="${d}"/>`;
-    // Variants drawn for the picker only
-    const SHORT_L = "M168 128 Q188 190 182 250 L176 298 L118 274 Q138 196 168 128 Z";
-    const SHORT_HEM = "M124 266 L176 288";
-    const BAND_L = "M246 90 L260 86 Q272 122 300 144 L300 160 Q262 138 246 90 Z";
-    return `<svg class="cshirt" viewBox="70 56 460 572" role="img" aria-label="Illustration of a shirt with the chosen fabric, colour, collar and sleeve">
+    const cloth = (id, cls = "") => `<path class="c ${cls}" d="${part(id)}"/>`;
+    return `<svg class="cshirt" viewBox="70 56 460 572" role="img" aria-label="Illustration of a shirt in the chosen fabric and colour">
   <defs>
     <pattern id="wStripe" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" class="pf"/><rect x="6" width="3" height="16" class="ps"/></pattern>
     <pattern id="wCheck" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" class="pf"/><rect x="8" width="5" height="22" class="ps"/><rect y="8" width="22" height="5" class="ps"/></pattern>
   </defs>
-  ${cloth(part("back"), "under")}${cloth(part("stand"), "under")}
-  <g class="v-long">${cloth(part("sleeveL"))}${cloth(part("sleeveR"))}${cloth(part("cuffL"))}${cloth(part("cuffR"))}</g>
-  <g class="v-short">${cloth(SHORT_L)}${cloth(mirror(SHORT_L))}</g>
-  ${cloth(part("frontL"))}${cloth(part("frontR"))}${cloth(part("placket"))}
-  <g class="v-leaf">${cloth(part("collarL"))}${cloth(part("collarR"))}</g>
-  <g class="v-band">${cloth(BAND_L)}${cloth(mirror(BAND_L))}</g>
-  <g class="cpocket">${cloth(part("pocket"))}${seam(SEAMS[14])}</g>
-  <g class="cstitch">${SEAMS.slice(0, 10).map(seam).join("")}</g>
-  <g class="v-long">${seam(SEAMS[10])}${seam(SEAMS[11])}</g>
-  <g class="v-short">${seam(SHORT_HEM)}${seam(mirror(SHORT_HEM))}</g>
-  <g class="v-leaf">${seam(SEAMS[12])}${seam(SEAMS[13])}</g>
-  <g class="cbuttons">${BUTTONS.map((y) => `<circle cx="300" cy="${y}" r="4.6"/>`).join("")}<g class="v-bd"><circle cx="268" cy="163" r="3.4"/><circle cx="332" cy="163" r="3.4"/></g></g>
+  ${cloth("back", "under")}${cloth("stand", "under")}${cloth("sleeveL")}${cloth("sleeveR")}${cloth("cuffL")}${cloth("cuffR")}${cloth("frontL")}${cloth("frontR")}${cloth("placket")}${cloth("collarL")}${cloth("collarR")}
+  <g class="cpocket">${cloth("pocket")}<path class="cs" d="${SEAMS[SEAMS.length - 1]}"/></g>
+  <g class="cstitch">${SEAMS.slice(0, -1)
+    .map((d) => `<path class="cs" d="${d}"/>`)
+    .join("")}</g>
+  <g class="cbuttons">${BUTTONS.map((y) => `<circle cx="300" cy="${y}" r="4.6"/>`).join("")}</g>
 </svg>`;
   };
-
   update(0);
 })();

@@ -113,6 +113,4 @@ window.SV = {
     ["Charcoal", "#3a3f4b", "#2c303a", "#6d7482"],
   ],
   fabricWeaves: ["Solid", "Stripe", "Check"],
-  fabricCollars: ["Classic", "Button-down", "Band"],
-  fabricSleeves: ["Long", "Short"],
 };

@@ -14,7 +14,8 @@
   const BASE = window.SV_BASE || "/";
   // True when there is no server behind the site (GitHub Pages, the single-file preview): the form then sends through WhatsApp
   const NO_SERVER = HASH_MODE || window.SV_STATIC === true;
-  const PAGES = ["about", "manufacturing", "products", "sourcing", "capabilities", "contact"];
+  const PAGES = ["about", "manufacturing", "products", "sourcing", "contact"];
+  const MOVED = { capabilities: "manufacturing" }; // pages that were merged into another
 
   /* ---------- Smooth scrolling (desktop only, off for reduced motion) ---------- */
   let lenis = null;
@@ -57,37 +58,6 @@
     { threshold: 0.15 },
   );
   const observeReveals = () => $$(".rv:not(.in)").forEach((e) => io.observe(e));
-
-  /* ---------- Homepage: "Made here" pinned sequence ---------- */
-  const copy = $("#copy"),
-    frame = $("#frame"),
-    track = $("#track");
-  SV.stages.forEach((s, i) => {
-    copy.insertAdjacentHTML(
-      "beforeend",
-      `<div class="st"><span class="mono">Stage ${i + 1} of ${SV.stages.length}</span><h3 class="serif">${s[0]}</h3><p>${s[1]}</p></div>`,
-    );
-    frame.insertAdjacentHTML(
-      "beforeend",
-      `<div class="v" role="img" aria-label="${s[4]}" style="background-image:var(--im${s[3]})"></div>`,
-    );
-    track.insertAdjacentHTML("beforeend", `<span>${pad(i + 1)} ${s[2]}</span>`);
-  });
-  const stageCopy = $$(".st"),
-    stageImg = $$(".v"),
-    stageTick = $$("#track span");
-  let activeStage = -1;
-  function makingScroll() {
-    const r = $("#making").getBoundingClientRect();
-    const p = clamp(-r.top / (r.height - innerHeight));
-    track.style.setProperty("--p", p);
-    const i = Math.min(SV.stages.length - 1, Math.floor(p * SV.stages.length));
-    if (i === activeStage) return;
-    activeStage = i;
-    [stageCopy, stageImg, stageTick].forEach((set) => set.forEach((el, k) => el.classList.toggle("on", k === i)));
-    $("#fig").textContent = `Fig. ${pad(i + 1)} · ${SV.stages[i][0]}`;
-    $("#bignum").textContent = pad(i + 1);
-  }
 
   /* ---------- Homepage: the shirt that comes together (drawn in garment.js) ---------- */
   const gSteps = $$("#gsteps li"),
@@ -155,7 +125,7 @@
       if (r.bottom < 0 || r.top > innerHeight) return;
       m.firstElementChild.style.translate = `0 ${(r.top + r.height / 2 - innerHeight / 2) * -0.07}px`;
     });
-    $$(".band, .site").forEach((b) => {
+    $$(".band").forEach((b) => {
       const r = b.getBoundingClientRect();
       if (r.bottom < 0 || r.top > innerHeight) return;
       b.style.backgroundPosition = `center ${30 + ((r.top + r.height) / (innerHeight + r.height)) * 40}%`;
@@ -173,7 +143,7 @@
     $(".hero h1").style.opacity = 1 - p * 1.1;
   }
   function windowScroll() {
-    $$(".band, .site").forEach((b) => {
+    $$(".band").forEach((b) => {
       if (b.hidden) return;
       const r = b.getBoundingClientRect();
       if (r.bottom < 0 || r.top > innerHeight) return;
@@ -195,7 +165,6 @@
     requestAnimationFrame(() => {
       ticking = false;
       if (!$("#home").hidden) {
-        makingScroll();
         garmentScroll();
         galleryScroll();
         heroScroll();
@@ -224,7 +193,7 @@
       .slice(BASE.length)
       .replace(/index\.html$/, "")
       .replace(/^\/+|\/+$/g, "");
-    return PAGES.includes(p) ? p : "";
+    return PAGES.includes(p) ? p : MOVED[p] || "";
   }
 
   function closeMenu() {
@@ -237,8 +206,8 @@
   function swap(page, anchor) {
     $$("main").forEach((m) => (m.hidden = m.id !== (page ? "page-" + page : "home")));
     // The enquiry form and the facility photo close the homepage and the Contact page only
-    $("#enquire").hidden = $(".site").hidden = !(page === "" || page === "contact");
-    $("#shravan").hidden = !(page === "" || page === "contact" || page === "about");
+    $("#enquire").hidden = !(page === "" || page === "contact");
+    $("#shravan").hidden = page !== "";
     document.title = SV.titles[page];
     $$("nav .links a, #mm a").forEach((a) => {
       const on = page !== "" && a.getAttribute("href").replace(/^#page-|^\.?\/|\/$/g, "") === page;
@@ -248,7 +217,7 @@
     const target = anchor && document.getElementById(anchor);
     target && !target.hidden ? scrollToEl(target, false) : scrollToY(0, false);
     if (ready) observeReveals();
-    activeStage = gActive = -1;
+    gActive = -1;
     if (SV.innerRefresh) SV.innerRefresh();
     onScroll();
   }

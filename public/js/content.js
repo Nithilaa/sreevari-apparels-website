@@ -15,11 +15,10 @@ window.SV = {
     manufacturing: "Manufacturing — Sreevari Apparels",
     products: "Products — Sreevari Apparels",
     sourcing: "Sourcing — Sreevari Apparels",
-    capabilities: "Capabilities — Sreevari Apparels",
     contact: "Start a project — Sreevari Apparels",
   },
 
-  // Homepage "Made here" sequence: [title, text, short label, image, alt]
+  // Manufacturing page, the seven stages: [title, text, short label, image, alt]
   stages: [
     [
       "Fabric inspection",
@@ -67,35 +66,9 @@ window.SV = {
       "Finishing and packing",
       "Finishing, packing and export preparation.",
       "Packing",
-      13,
-      "Folded shirts being packed into cartons",
+      35,
+      "A white shirt being pressed, with finished shirts on a rail behind",
     ],
-  ],
-
-  // Manufacturing page: [image, title, text]
-  manufacturing: [
-    [
-      16,
-      "Overview",
-      "Woven garments are made in our own Coimbatore facility, from fabric approval through to export preparation.",
-    ],
-    [
-      6,
-      "CAD and pattern development",
-      "CAD, pattern development and pattern making, from sketches, tech packs, references and samples.",
-    ],
-    [
-      7,
-      "Fabric sourcing and approval",
-      "Fabric is sourced and approved against the buyer’s specification before production begins.",
-    ],
-    [4, "Cutting", "Fabric prepared and cut to the approved pattern."],
-    [3, "Sewing", "Garment assembly on 120+ sewing machines."],
-    [24, "Trimming", "Trims added and checked as the garment is assembled."],
-    [2, "Quality checking", "In-line checking during production."],
-    [25, "Final inspection", "Final AQL inspection before the goods are packed."],
-    [12, "Finishing", "Finishing, with washing support available."],
-    [13, "Packing", "Packing and export preparation."],
   ],
 
   // Products page and homepage gallery: [name, image(s), made in-house?, text]
@@ -116,30 +89,18 @@ window.SV = {
     [17, "Fabric sourcing", "Fabrics sourced to specification."],
   ],
 
-  sourcingSteps: [
-    ["01", "Requirement", "Share product specifications."],
-    ["02", "Sourcing", "Identify suitable manufacturing partners."],
-    ["03", "Development", "Coordinate sampling and product development."],
-    ["04", "Approval", "Review samples and specifications."],
-    ["05", "Production", "Coordinate the agreed programme."],
-    ["06", "Delivery", "Coordinate finishing, packing and shipment."],
-  ],
-
   aboutTimeline: [
-    ["1993", "Established in Coimbatore", "Sreevari Apparels begins manufacturing in Tamil Nadu."],
-    ["Woven focus", "Specialised knowledge", "A focused understanding of woven fabrics, construction and finishing."],
-    ["Own facility", "Made in Irugur", "120+ sewing machines and approximately 1,500–2,000 pieces per day."],
+    ["1993", "Established in Coimbatore", "Sreevari Apparels begins manufacturing woven garments in Tamil Nadu."],
     [
-      "Compliance",
-      "SEDEX compliant",
-      "Our facility operates against the SMETA 4-Pillar standard and audit requirements.",
+      "Own facility",
+      "Made in Irugur",
+      "Woven garments are produced in our own facility, to approved samples and buyer specifications.",
     ],
     [
       "Partner network",
       "Wider possibility",
-      "Knitwear, home textiles and fabrics sourced through partners across India.",
+      "Knitwear, home textiles and fabrics are sourced through manufacturing partners across India.",
     ],
-    ["One contact", "Shravan J.", "A dedicated point of contact from enquiry to shipment."],
   ],
 
   // Wording supplied by the company. The four pillars are the areas a SMETA 4-Pillar audit covers.
@@ -148,28 +109,6 @@ window.SV = {
     text: "Our manufacturing facility is SEDEX compliant and operates against the SMETA 4-Pillar standard and audit requirements.",
     pillars: ["Labour standards", "Health and safety", "Environment", "Business ethics"],
   },
-
-  // Capabilities page: [name, image, text]
-  capabilities: [
-    [
-      "Fabric sourcing and approval",
-      7,
-      "Fabric is sourced and approved against the buyer’s specification before production begins.",
-    ],
-    [
-      "CAD and pattern development",
-      6,
-      "CAD, pattern development and pattern making, from sketches, tech packs, references and samples.",
-    ],
-    ["Sampling and product development", 5, "A physical sample is developed and reviewed against the specification."],
-    ["Cutting and sewing", 4, "Fabric is cut to the approved pattern and assembled on 120+ sewing machines."],
-    ["Trimming and checking", 24, "Trims are added and checked as the garment is assembled."],
-    ["In-line quality control", 2, "Garments are checked in-line while they are being made."],
-    ["Final AQL inspection", 25, "A final AQL inspection takes place before the goods are packed."],
-    ["Finishing and packing", 13, "Garments are finished and packed to the buyer’s requirements."],
-    ["Washing support", 29, "Washing support is available as part of finishing."],
-    ["Export preparation", 30, "Packed goods are prepared for export."],
-  ],
 
   // Products page fabric picker. Illustrative options only: real fabrics and colours follow the buyer's specification.
   fabricColours: [

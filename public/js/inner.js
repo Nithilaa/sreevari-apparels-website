@@ -1,8 +1,7 @@
 /*
  * Behaviour for the inner pages:
  *   Products       a shirt you can recolour and re-weave, which feeds the enquiry
- *   Manufacturing  the photo stays in place and changes as the ten stages scroll past
- *   Capabilities   pick a capability to see its photo and a line about it
+ *   Manufacturing  the photo stays in place and changes as the seven stages scroll past
  *   About          a thread that draws itself down the company's story
  */
 (() => {
@@ -63,28 +62,6 @@
     paint();
   }
 
-  /* ---------- Capabilities ---------- */
-  const capItems = $$(".caplist li"),
-    capPics = $$(".cappanel > div:not(.capcard)");
-  function showCap(i, toggle) {
-    capItems.forEach((li, k) => {
-      const open = k === i && !(toggle && li.classList.contains("on"));
-      li.classList.toggle("on", open);
-      $("button", li).setAttribute("aria-expanded", String(open));
-    });
-    capPics.forEach((p, k) => p.classList.toggle("on", k === i));
-    if (!capItems[i]) return;
-    $(".capcard .mono").textContent = `CAP-${String(i + 1).padStart(2, "0")} · ${SV.capabilities[i][0]}`;
-    $(".capcard p").textContent = SV.capabilities[i][2];
-  }
-  capItems.forEach((li, i) => {
-    // phones: tap to open and close. Desktop: hovering or focusing is enough.
-    $("button", li).addEventListener("click", () => showCap(i, !wide.matches));
-    li.addEventListener("mouseenter", () => wide.matches && showCap(i));
-    $("button", li).addEventListener("focus", () => wide.matches && showCap(i));
-  });
-  if (capItems.length) showCap(0);
-
   /* ---------- Scroll-linked pieces: Manufacturing stages and the About thread ---------- */
   const lineItems = $$(".linelist li"),
     linePics = $$(".linepic > div");
@@ -111,7 +88,7 @@
         lineActive = best;
         lineItems.forEach((li, i) => li.classList.toggle("on", i === best));
         linePics.forEach((p, i) => p.classList.toggle("on", i === best));
-        $(".linecap").textContent = `${String(best + 1).padStart(2, "0")} · ${SV.manufacturing[best][1]}`;
+        $(".linecap").textContent = `${String(best + 1).padStart(2, "0")} · ${SV.stages[best][0]}`;
       }
     }
   }

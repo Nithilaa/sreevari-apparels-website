@@ -12,8 +12,8 @@
     `<div class="im ${cls}" role="img" aria-label="${alt}"><div style="background-image:var(--im${n})"></div></div>`;
 
   // Page opening: headline on the left, a picture (or any block) on the right
-  const header = (kicker, headline, media = "") =>
-    `<section class="rv pghead ${media ? "has" : ""}"><div><span class="mono fade kicker">${kicker}</span>${lines(headline)}</div>${media}</section>`;
+  const header = (kicker, headline, media = "", sub = "") =>
+    `<section class="rv pghead ${media ? "has" : ""}"><div><span class="mono fade kicker">${kicker}</span>${lines(headline)}${sub ? `<p class="fade lead sub" style="--i:3">${sub}</p>` : ""}</div>${media}</section>`;
 
   const row = (i, n, title, text, extra = "") => {
     const alt = "Illustrative photograph: " + title;
@@ -38,7 +38,7 @@
       ["Three decades", "of understanding", "the garment."],
       img(21, "Exterior of the Sreevari facility in Irugur, Coimbatore", "ls"),
     ) +
-    `<section class="split rv"><div><p class="fade lead">Sreevari Apparels Private Limited was established in 1993 in Coimbatore, Tamil Nadu. We specialise in woven garments made in our own facility in Irugur, and we source knitwear, home textiles and fabrics through a manufacturing partner network across India.</p><p class="fade" style="margin-top:22px;--i:1">Development begins with whatever a buyer has: a sketch, tech pack, reference or sample. We build to approved samples and buyer specifications.</p></div>${img(34, "Soft folds of woven fabric in white, grey, light blue and navy", "ls")}</section>` +
+    `<section class="split rv"><div><p class="fade lead">Sreevari Apparels Private Limited was established in 1993 in Coimbatore, Tamil Nadu. We specialise in woven garments made in our own facility in Irugur, and we source knitwear, home textiles and fabrics through a manufacturing partner network across India.</p><p class="fade" style="margin-top:22px;--i:1">Development begins with whatever a buyer has: a sketch, tech pack, reference or sample. We build to approved samples and buyer specifications.</p></div>${img(37, "Finished shirts in white, light blue and navy on a rail, with folded stacks on a table")}</section>` +
     `<section class="dark story"><div class="rv">${lines(["The business,", "plainly."], "h2")}</div><div class="thread" data-track><i class="rail" aria-hidden="true"><b></b></i>${SV.aboutTimeline
       .map(
         (x) =>
@@ -46,22 +46,21 @@
       )
       .join("")}</div></section>`;
 
-  /* ---------- Manufacturing: the photo stays put while the ten stages scroll past it ---------- */
+  /* ---------- Manufacturing: the photo stays put while the seven stages scroll past it ---------- */
   P.manufacturing =
     header(
       "Manufacturing · Coimbatore",
       ["Where fabric", "becomes form."],
-      img(16, "Wide view of a sewing floor with rows of operators at machines", "ls"),
+      img(36, "Cutting tables in the foreground with sewing lines beyond", "ls"),
     ) +
-    `<section class="rv statsec"><div class="stats"><div class="fade"><b class="serif"><span data-count="120">120</span>+</b><span class="mono">Sewing machines</span></div><div class="fade" style="--i:1"><b class="serif"><span data-count="1500">1,500</span>–<span data-count="2000">2,000</span></b><span class="mono">Pieces per day, approximately</span></div><div class="fade" style="--i:2"><b class="serif">10</b><span class="mono">Stages, one facility</span></div></div></section>` +
-    `<section class="line" data-track><div class="linepic" aria-hidden="true">${SV.manufacturing
-      .map((m) => `<div style="background-image:var(--im${m[0]})"></div>`)
+    `<section class="line" data-track><div class="linepic" aria-hidden="true">${SV.stages
+      .map((m) => `<div style="background-image:var(--im${m[3]})"></div>`)
       .join(
         "",
-      )}<span class="mono linecap"></span></div><ol class="linelist"><i class="rail" aria-hidden="true"><b></b></i>${SV.manufacturing
+      )}<span class="mono linecap"></span></div><ol class="linelist"><i class="rail" aria-hidden="true"><b></b></i>${SV.stages
       .map(
         (m, i) =>
-          `<li><div class="lineph" role="img" aria-label="Illustrative photograph: ${m[1]}" style="background-image:var(--im${m[0]})"></div><span class="mono">${pad(i + 1)} / ${SV.manufacturing.length}</span><h3 class="serif">${m[1]}</h3><p>${m[2]}</p></li>`,
+          `<li><div class="lineph" role="img" aria-label="${m[4]}" style="background-image:var(--im${m[3]})"></div><span class="mono">${pad(i + 1)} / ${pad(SV.stages.length)}</span><h3 class="serif">${m[0]}</h3><p>${m[1]}</p></li>`,
       )
       .join("")}</ol></section>` +
     compliance();
@@ -119,34 +118,14 @@
         (m, i) =>
           `<div class="fade" style="--i:${i}">${img(m[0], "Illustrative photograph: " + m[1])}<span class="mono kicker">${pad(i + 1)}</span><h3 class="serif">${m[1]}</h3><p>${m[2]}</p></div>`,
       )
-      .join("")}</div></section>` +
-    `<section class="dark rv">${lines(["How sourcing", "works."], "h2")}<ol class="six">${SV.sourcingSteps
-      .map(
-        (x, i) =>
-          `<li class="fade" style="--i:${i}"><b class="serif">${x[0]}</b><h3 class="serif">${x[1]}</h3><p>${x[2]}</p></li>`,
-      )
-      .join("")}</ol></section>`;
+      .join("")}</div></section>`;
 
-  /* ---------- Capabilities: pick a capability, see it ---------- */
-  P.capabilities =
-    header(
-      "Capabilities · Dossier",
-      ["Everything a", "garment needs."],
-      img(15, "Close-up of a stitched white shirt collar and collar button", "ls"),
-    ) +
-    `<section class="capx rv"><ol class="caplist">${SV.capabilities
-      .map(
-        (c, i) =>
-          `<li><button type="button" aria-expanded="false"><span class="mono">CAP-${pad(i + 1)}</span><b class="serif">${c[0]}</b><i aria-hidden="true">+</i></button><div class="capin"><div class="capph" role="img" aria-label="Illustrative photograph: ${c[0]}" style="background-image:var(--im${c[1]})"></div><p>${c[2]}</p></div></li>`,
-      )
-      .join("")}</ol><div class="cappanel" aria-hidden="true">${SV.capabilities
-      .map((c) => `<div style="background-image:var(--im${c[1]})"></div>`)
-      .join("")}<div class="capcard"><span class="mono"></span><p></p></div></div></section>` +
-    compliance();
-
-  P.contact =
-    header("Contact", ["Let’s make", "something", "real."]) +
-    `<section class="rv"><p class="fade lead" style="max-width:34ch">Tell us what you’re looking to manufacture or source.</p>${SV.email ? `<p class="fade" style="margin-top:18px"><a href="mailto:${SV.email}">${SV.email}</a></p>` : ""}</section>`;
+  P.contact = header(
+    "Contact",
+    ["Let’s make", "something", "real."],
+    img(38, "A light blue shirt laid flat with a tape measure, pattern paper and navy thread", "ls"),
+    "Tell us what you’re looking to manufacture or source.",
+  );
 
   for (const k in P) document.getElementById("page-" + k).innerHTML = P[k];
 })();

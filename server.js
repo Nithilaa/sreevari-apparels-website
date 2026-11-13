@@ -50,6 +50,8 @@ for (const [slug, [title, description]] of Object.entries(PAGES)) {
   });
 }
 
+app.get("/capabilities", (req, res) => res.redirect(301, "/manufacturing")); // merged into Manufacturing
+
 app.get("/sitemap.xml", (req, res) => {
   const base = process.env.SITE_URL || `${req.protocol}://${req.get("host")}`;
   const urls = ["", ...Object.keys(PAGES)].map((p) => `<url><loc>${base}/${p}</loc></url>`).join("");

@@ -1582,6 +1582,10 @@ textarea {
   --im32: url(/images/product-shirt-womens.webp);
   --im33: url(/images/product-trousers-formal.webp);
   --im34: url(/images/texture-fabric-folds.webp);
+  --im35: url(/images/manufacturing-finishing.webp);
+  --im36: url(/images/manufacturing-overview.webp);
+  --im37: url(/images/finished-shirts-rail.webp);
+  --im38: url(/images/contact-shirt-flatlay.webp);
 }
 #enquire {
   background:
@@ -3899,5 +3903,29 @@ header.hero {
   }
   .cshirt {
     max-height: 46vh;
+  }
+}
+
+.pghead .sub {
+  margin-top: 22px;
+  max-width: 30ch;
+}
+/* the homepage numbers are three rows now */
+.nums > div:last-child {
+  border-bottom: 1px solid rgba(244, 245, 247, 0.22);
+}
+/* shorter pinned sections: less scrolling to get through the homepage */
+.hwrap {
+  height: 250vh;
+}
+.gar {
+  height: 400vh;
+}
+@media (max-width: 820px) {
+  .hwrap {
+    height: auto;
+  }
+  .gar {
+    height: 380vh;
   }
 }

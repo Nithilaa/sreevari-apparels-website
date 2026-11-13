@@ -43,7 +43,7 @@ const template = fs
   .replaceAll('content="/images/share-card.jpg"', `content="${SITE}images/share-card.jpg"`)
   .replace('href="/css/site.css"', 'href="site.css"')
   .replace(/(href|src|content)="\/(js|images|fonts|favicon)/g, '$1="$2')
-  .replace(/href="\/(about|manufacturing|products|sourcing|capabilities|contact)"/g, (m, slug) => `href="${pageLink(slug)}"`)
+  .replace(/href="\/(about|manufacturing|products|sourcing|contact)"/g, (m, slug) => `href="${pageLink(slug)}"`)
   .replace(/href="\/"/g, SITE ? 'href="./"' : 'href="#"')
   .replace(/(href="site\.css|src="js\/[^"]+\.js)"/g, `$1?v=${v}"`)
   .replace(

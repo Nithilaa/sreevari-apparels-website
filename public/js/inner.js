@@ -14,7 +14,7 @@
   /* ---------- Products: fabric and colour picker ---------- */
   const config = $("#config");
   if (config && SV.shirtMarkup) {
-    const pick = { colour: 1, weave: 0, pocket: true };
+    const pick = { colour: 1, weave: 0, collar: 0, sleeve: 0, pocket: true };
     config.innerHTML = `
 <div class="cstage">${SV.shirtMarkup()}<span class="mono cnote">Illustration</span></div>
 <div class="cctl">
@@ -22,6 +22,10 @@
   <div class="cdots" role="group" aria-label="Colour">${SV.fabricColours.map((c, i) => `<button type="button" data-colour="${i}" aria-pressed="false" aria-label="${c[0]}" title="${c[0]}" style="--dot:${c[1]}"></button>`).join("")}</div>
   <span class="mono">Weave</span>
   <div class="cseg" role="group" aria-label="Weave">${SV.fabricWeaves.map((w, i) => `<button type="button" data-weave="${i}" aria-pressed="false">${w}</button>`).join("")}</div>
+  <span class="mono">Collar</span>
+  <div class="cseg" role="group" aria-label="Collar">${SV.fabricCollars.map((w, i) => `<button type="button" data-collar="${i}" aria-pressed="false">${w}</button>`).join("")}</div>
+  <span class="mono">Sleeve</span>
+  <div class="cseg" role="group" aria-label="Sleeve">${SV.fabricSleeves.map((w, i) => `<button type="button" data-sleeve="${i}" aria-pressed="false">${w}</button>`).join("")}</div>
   <span class="mono">Pocket</span>
   <div class="cseg" role="group" aria-label="Pocket"><button type="button" data-pocket="1" aria-pressed="false">With</button><button type="button" data-pocket="0" aria-pressed="false">Without</button></div>
   <p class="csum" aria-live="polite"></p>
@@ -30,17 +34,27 @@
 </div>`;
     const svg = $(".cshirt", config);
     const summary = () =>
-      `${SV.fabricColours[pick.colour][0]}, ${SV.fabricWeaves[pick.weave].toLowerCase()}, ${pick.pocket ? "with" : "without"} a chest pocket`;
+      [
+        SV.fabricColours[pick.colour][0],
+        SV.fabricWeaves[pick.weave].toLowerCase(),
+        SV.fabricCollars[pick.collar].toLowerCase() + " collar",
+        SV.fabricSleeves[pick.sleeve].toLowerCase() + " sleeve",
+        (pick.pocket ? "with" : "without") + " a chest pocket",
+      ].join(", ");
     function paint() {
       const [, fab, fab2, stripe] = SV.fabricColours[pick.colour];
       svg.style.setProperty("--fab", fab);
       svg.style.setProperty("--fab2", fab2);
       svg.style.setProperty("--stripe", stripe);
       svg.dataset.weave = SV.fabricWeaves[pick.weave].toLowerCase();
+      svg.dataset.collar = ["classic", "bd", "band"][pick.collar];
+      svg.dataset.sleeve = ["long", "short"][pick.sleeve];
       svg.classList.toggle("nopocket", !pick.pocket);
       svg.classList.toggle("deep", pick.colour === 2 || pick.colour === 4);
       $$("[data-colour]", config).forEach((b, i) => b.setAttribute("aria-pressed", String(i === pick.colour)));
       $$("button[data-weave]", config).forEach((b, i) => b.setAttribute("aria-pressed", String(i === pick.weave)));
+      $$("button[data-collar]", config).forEach((b, i) => b.setAttribute("aria-pressed", String(i === pick.collar)));
+      $$("button[data-sleeve]", config).forEach((b, i) => b.setAttribute("aria-pressed", String(i === pick.sleeve)));
       $$("[data-pocket]", config).forEach((b) =>
         b.setAttribute("aria-pressed", String((b.dataset.pocket === "1") === pick.pocket)),
       );
@@ -55,6 +69,8 @@
       if (!b) return;
       if (b.dataset.colour) pick.colour = +b.dataset.colour;
       else if (b.dataset.weave) pick.weave = +b.dataset.weave;
+      else if (b.dataset.collar) pick.collar = +b.dataset.collar;
+      else if (b.dataset.sleeve) pick.sleeve = +b.dataset.sleeve;
       else if (b.dataset.pocket) pick.pocket = b.dataset.pocket === "1";
       else if (b.id === "cenq") return SV.goEnquire("Shirts", "Manufacturing", "Shirt: " + summary() + ".");
       paint();

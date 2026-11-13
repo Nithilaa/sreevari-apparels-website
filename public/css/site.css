@@ -4303,3 +4303,214 @@ header.hero {
     max-height: 60px;
   }
 }
+
+/* ==================== Woven and knit diagrams in the two home panels ==================== */
+.two > div {
+  position: relative;
+  overflow: hidden;
+}
+.two > .dark,
+.src {
+  background-image: none;
+}
+.src {
+  background-color: #d6d9e0;
+}
+.two > div > :not(.art) {
+  position: relative;
+  z-index: 1;
+}
+.art {
+  position: absolute;
+  top: clamp(56px, 7vw, 104px);
+  right: clamp(20px, 5vw, 72px);
+  width: min(46%, 330px);
+}
+.art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.art .mono {
+  display: block;
+  margin-top: 10px;
+  font-size: 10px;
+  opacity: 0.7;
+}
+.wp {
+  fill: #3f55a8;
+}
+.wf {
+  fill: #c9d4ff;
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: weft 9s cubic-bezier(0.5, 0, 0.2, 1) calc(var(--r) * 0.45s) infinite both;
+}
+@keyframes weft {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  16%,
+  86% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  96%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+.kn {
+  fill: none;
+  stroke: #0b1b4a;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  animation: knit 9s cubic-bezier(0.5, 0, 0.2, 1) calc(var(--r) * 0.4s) infinite both;
+}
+.kn:nth-child(even) {
+  stroke: #0337b0;
+}
+@keyframes knit {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  20%,
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  96%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+@media (max-width: 820px) {
+  .art {
+    position: static;
+    width: 62%;
+    margin: 4px 0 6px;
+  }
+  .two > div {
+    min-height: 0;
+    justify-content: flex-start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wf,
+  .kn {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ==================== Picker: collar and sleeve variants ==================== */
+.cshirt .v-short,
+.cshirt .v-band,
+.cshirt .v-bd,
+.cshirt[data-sleeve="short"] .v-long,
+.cshirt[data-collar="band"] .v-leaf {
+  display: none;
+}
+.cshirt[data-sleeve="short"] .v-short,
+.cshirt[data-collar="band"] .v-band,
+.cshirt[data-collar="bd"] .v-bd {
+  display: inline;
+}
+.cctl > .mono {
+  margin: 11px 0 6px;
+}
+.cseg button {
+  padding: 7px 13px;
+}
+.cdots button {
+  width: 32px;
+  height: 32px;
+}
+.csum {
+  font-size: clamp(18px, 1.45vw, 22px);
+  margin: 14px 0 10px;
+}
+@media (max-width: 640px) {
+  /* the shirt stays in view while you tap through the options */
+  .cstage {
+    position: sticky;
+    top: 62px;
+    z-index: 2;
+    box-shadow: 0 10px 18px -12px rgba(11, 27, 74, 0.35);
+  }
+  .cshirt {
+    max-height: 34vh;
+    padding: 8px;
+  }
+}
+/* panels: words on the left, diagram on the right, nothing overlapping */
+.two > .dark {
+  background-color: var(--forest);
+}
+.two > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+  grid-template-areas: "label art" "text art";
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(20px, 3vw, 48px);
+  align-items: end;
+  min-height: 0;
+}
+.two > div > .mono {
+  grid-area: label;
+  align-self: start;
+}
+.two > div > div:not(.art) {
+  grid-area: text;
+}
+.art {
+  grid-area: art;
+  position: static;
+  width: 100%;
+  max-width: 300px;
+  justify-self: end;
+  align-self: center;
+}
+@media (max-width: 1100px) {
+  .two > div {
+    grid-template-columns: 1fr;
+    grid-template-areas: "art" "label" "text";
+    grid-template-rows: auto;
+    row-gap: 18px;
+  }
+  .art {
+    width: 60%;
+    max-width: 260px;
+    justify-self: start;
+    margin: 0;
+  }
+}
+.two > div {
+  grid-template-columns: minmax(0, 1fr) clamp(170px, 15vw, 250px);
+}
+.two h3 {
+  font-size: clamp(34px, 3.2vw, 58px);
+  white-space: nowrap;
+}
+@media (max-width: 1100px) {
+  .two > div {
+    grid-template-columns: 1fr;
+  }
+  .two h3 {
+    font-size: clamp(40px, 6vw, 60px);
+  }
+}
+.two > div > div:not(.art) {
+  align-self: start;
+  margin-top: clamp(14px, 2.4vw, 36px);
+}
+@media (max-width: 1100px) {
+  .two > div > div:not(.art) {
+    margin-top: 0;
+  }
+}

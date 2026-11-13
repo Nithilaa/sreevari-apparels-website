@@ -59,27 +59,90 @@
   );
   const observeReveals = () => $$(".rv:not(.in)").forEach((e) => io.observe(e));
 
-  /* ---------- Homepage: the shirt that comes together (drawn in garment.js) ---------- */
+  /* ---------- Homepage: the shirt that comes together (drawn in garment.js) ----------
+     It plays by itself once it is on screen, one step at a time. Clicking a step jumps to it.
+     Nothing here depends on scroll position, so the page scrolls normally past it. */
   const gSteps = $$("#gsteps li"),
-    gNames = gSteps.map((li) => $("b", li).textContent);
-  let gActive = -1;
-  function garmentScroll() {
-    const r = $("#journey").getBoundingClientRect();
-    const p = clamp(-r.top / (r.height - innerHeight));
-    SV.garment.update(p);
-    const i = Math.min(gSteps.length - 1, Math.floor(p * gSteps.length));
-    $(".ghint").style.opacity = p > 0.03 ? 0 : 1;
-    if (i === gActive) return;
-    gActive = i;
-    gSteps.forEach((li, k) => li.classList.toggle("on", k === i));
+    gNames = gSteps.map((li) => $("b", li).textContent),
+    gBtn = $("#gplay");
+  const G_STOPS = [0.19, 0.39, 0.62, 0.78, 0.97]; // where each step's drawing is complete
+  let gP = 0,
+    gStep = -1,
+    gAnim = 0,
+    gTimer = 0,
+    gPlaying = false,
+    gSeen = false;
+  function gMark(i) {
+    gStep = i;
+    gSteps.forEach((li, k) => {
+      li.classList.toggle("on", k === i);
+      li.setAttribute("aria-current", k === i ? "step" : "false");
+    });
     $("#gcap").textContent = `${pad(i + 1)} · ${gNames[i]}`;
   }
-  gSteps.forEach((li, k) =>
-    li.addEventListener("click", () => {
-      const r = $("#journey").getBoundingClientRect();
-      scrollToY(scrollY + r.top + ((k + 0.55) / gSteps.length) * (r.height - innerHeight), true);
-    }),
-  );
+  function gGo(i, then, quick) {
+    cancelAnimationFrame(gAnim);
+    clearTimeout(gTimer);
+    gMark(i);
+    const from = gP,
+      to = G_STOPS[i];
+    if (reduced) return void SV.garment.update((gP = to));
+    const dur = quick ? 1100 : 700 + Math.abs(to - from) * 6500;
+    let t0 = 0;
+    const tick = (t) => {
+      t0 = t0 || t;
+      const k = Math.min((t - t0) / dur, 1);
+      gP = from + (to - from) * (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+      SV.garment.update(gP);
+      if (k < 1) gAnim = requestAnimationFrame(tick);
+      else if (then) then();
+    };
+    gAnim = requestAnimationFrame(tick);
+  }
+  function gLabel() {
+    const done = !gPlaying && gStep === G_STOPS.length - 1;
+    gBtn.textContent = gPlaying ? "Pause" : done ? "Replay" : "Play";
+  }
+  function gPlay() {
+    gPlaying = true;
+    gLabel();
+    const next = () => {
+      if (!gPlaying) return;
+      if (gStep >= G_STOPS.length - 1) return ((gPlaying = false), gLabel());
+      gGo(gStep + 1, () => (gTimer = setTimeout(next, 1500)));
+    };
+    next();
+  }
+  function gStop() {
+    gPlaying = false;
+    clearTimeout(gTimer);
+    gLabel();
+  }
+  gBtn.addEventListener("click", () => {
+    if (gPlaying) return gStop();
+    if (gStep >= G_STOPS.length - 1) {
+      gP = 0;
+      gStep = -1;
+      SV.garment.update(0);
+    }
+    gPlay();
+  });
+  gSteps.forEach((li, k) => {
+    const pick = () => (gStop(), gGo(k, null, true), gLabel());
+    li.addEventListener("click", pick);
+    li.addEventListener("keydown", (e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), pick()));
+  });
+  new IntersectionObserver(
+    ([e]) => {
+      if (e.isIntersecting && !gSeen) {
+        gSeen = true;
+        reduced ? (gGo(G_STOPS.length - 1), gLabel()) : gPlay();
+      } else if (!e.isIntersecting && gPlaying) gStop(); // no point animating off screen
+    },
+    { threshold: 0.45 },
+  ).observe($(".gpanel"));
+  gMark(0);
+  gStep = -1; // nothing has played yet, so Play starts with step one
 
   /* ---------- Homepage: product gallery (scrolls sideways on desktop, swipes on phones) ---------- */
   const hwrap = $("#hwrap"),
@@ -165,7 +228,6 @@
     requestAnimationFrame(() => {
       ticking = false;
       if (!$("#home").hidden) {
-        garmentScroll();
         galleryScroll();
         heroScroll();
       }
@@ -217,7 +279,6 @@
     const target = anchor && document.getElementById(anchor);
     target && !target.hidden ? scrollToEl(target, false) : scrollToY(0, false);
     if (ready) observeReveals();
-    gActive = -1;
     if (SV.innerRefresh) SV.innerRefresh();
     onScroll();
   }

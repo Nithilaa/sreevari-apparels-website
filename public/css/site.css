@@ -4306,7 +4306,8 @@ header.hero {
 
 /* ==================== Shravan's signature ====================
    The lettering is Mrs Saint Delafield (SIL Open Font License), stored as an outline.
-   A mask of pen strokes, traced along the centre of the letters in writing order, uncovers it,
+   Each letter has its own mask of pen strokes traced along its centre line; the letters are
+   uncovered one after another, each finished before the next begins,
    so it appears as it would under a pen. It is written once and stays written. */
 .sig {
   display: block;

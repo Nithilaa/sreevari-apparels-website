@@ -87,7 +87,7 @@
     const from = gP,
       to = G_STOPS[i];
     if (reduced) return void SV.garment.update((gP = to));
-    const dur = quick ? 1100 : 700 + Math.abs(to - from) * 6500;
+    const dur = quick ? 700 : 450 + Math.abs(to - from) * 2600;
     let t0 = 0;
     const tick = (t) => {
       t0 = t0 || t;
@@ -109,7 +109,7 @@
     const next = () => {
       if (!gPlaying) return;
       if (gStep >= G_STOPS.length - 1) return ((gPlaying = false), gLabel());
-      gGo(gStep + 1, () => (gTimer = setTimeout(next, 1500)));
+      gGo(gStep + 1, () => (gTimer = setTimeout(next, 450)));
     };
     next();
   }

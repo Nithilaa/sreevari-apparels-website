@@ -21,7 +21,10 @@ npm start          # http://localhost:3000
 | `public/index.html` | Page shell and the homepage markup |
 | `public/js/content.js` | All editable text and data for the inner pages and the homepage sequence |
 | `public/js/pages.js` | Turns `content.js` into the About, Manufacturing, Products, Sourcing, Capabilities and Contact pages |
-| `public/js/site.js` | Routing, page transitions, scroll animations, cursor effects, form submission |
+| `public/js/garment.js` | The shirt that is sketched, laid out as pattern pieces, sewn and multiplied as you scroll |
+| `public/js/enquiry.js` | The four-step enquiry builder and its WhatsApp / server sending |
+| `public/js/fabric.js` | The hero photo drawn as cloth that ripples under the pointer (WebGL, with the plain photo as fallback) |
+| `public/js/site.js` | Routing, page transitions, scroll animations, cursor effects |
 | `public/css/site.css` | All styles. Image paths are the `--imN` variables near the top |
 | `public/images/` | 34 WebP images and the company logo (`logo.png`) |
 | `public/fonts/` | Self-hosted Instrument Serif, Manrope and JetBrains Mono |

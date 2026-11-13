@@ -24,12 +24,18 @@
 
   const timeline = (items) =>
     `<div class="tl">${items
-      .map((x) => `<div class="fade"><span class="mono">${x[0]}</span><div><h3 class="serif">${x[1]}</h3><p>${x[2]}</p></div></div>`)
+      .map(
+        (x) =>
+          `<div class="fade"><span class="mono">${x[0]}</span><div><h3 class="serif">${x[1]}</h3><p>${x[2]}</p></div></div>`,
+      )
       .join("")}</div>`;
 
   const compliance = () =>
     `<section class="dark comp rv"><span class="mono fade kicker">Compliance</span>${lines(SV.compliance.headline, "h2")}<p class="fade lead" style="--i:2">${SV.compliance.text}</p><div class="pillars">${SV.compliance.pillars
-      .map((x, i) => `<div class="fade" style="--i:${i + 3}"><b class="serif">${["I", "II", "III", "IV"][i]}</b><i aria-hidden="true"></i><span class="mono">${x}</span></div>`)
+      .map(
+        (x, i) =>
+          `<div class="fade" style="--i:${i + 3}"><b class="serif">${["I", "II", "III", "IV"][i]}</b><i aria-hidden="true"></i><span class="mono">${x}</span></div>`,
+      )
       .join("")}</div><p class="mono fade pnote" style="--i:7">The four pillars of a SMETA audit</p></section>`;
 
   const P = {};
@@ -62,21 +68,36 @@
       .join("")}</section>`;
 
   // Abstract diagram only. Node positions are decorative, not partner locations.
-  const nodes = [[110, 70], [190, 330], [490, 60], [540, 300], [320, 40], [80, 200], [580, 180], [420, 370], [250, 120]];
+  const nodes = [
+    [110, 70],
+    [190, 330],
+    [490, 60],
+    [540, 300],
+    [320, 40],
+    [80, 200],
+    [580, 180],
+    [420, 370],
+    [250, 120],
+  ];
   P.sourcing =
     header("Sourcing", ["India. A network", "of possibility."]) +
     `<section class="split rv"><div><p class="fade lead">Sreevari sources knitwear, home textiles and fabrics through suitable manufacturing partners across India. We coordinate; our partners manufacture.</p><p class="fade" style="margin-top:22px">Woven garments remain a direct-manufacturing line, made in our own Coimbatore facility. Sourcing is a separate service, run through one point of contact.</p></div>${img(28, "Two people reviewing fabric swatches and a sample shirt at a table", "ls")}</section>` +
     `<section class="rv">${img(27, "Fabric rolls and folded knit fabrics stacked on shelves in soft window light", "wd")}</section>` +
-    `<section class="dark rv"><svg class="net" viewBox="0 0 620 400" role="img" aria-label="Abstract network diagram: a central Sreevari node linked to unlabelled partner nodes">${nodes
+    `<section class="dark netsec rv"><svg class="net" viewBox="0 0 620 400" role="img" aria-label="Abstract network diagram: a central Sreevari node linked to unlabelled partner nodes">${nodes
       .map((n) => `<line x1="310" y1="200" x2="${n[0]}" y2="${n[1]}"/><circle cx="${n[0]}" cy="${n[1]}" r="6"/>`)
-      .join("")}<circle cx="310" cy="200" r="14" class="hub"/><text x="310" y="232" text-anchor="middle">SREEVARI</text></svg><p class="mono netnote">Illustrative only. Partner locations are not shown.</p></section>` +
+      .join(
+        "",
+      )}<circle cx="310" cy="200" r="14" class="hub"/><text x="310" y="232" text-anchor="middle">SREEVARI</text></svg><p class="mono netnote">Illustrative only. Partner locations are not shown.</p></section>` +
     `<section>${SV.sourcingLines.map((m, i) => row(i, m[0], m[1], m[2])).join("")}</section>` +
     `<section class="light rv">${lines(["How sourcing", "works."], "h2")}${timeline(SV.sourcingSteps)}</section>`;
 
   P.capabilities =
     header("Capabilities · Dossier", ["Everything a", "garment needs."]) +
     `<section class="rv"><div class="caps">${SV.capabilities
-      .map((c, i) => `<div class="fade"><span class="mono kicker">CAP-${pad(i + 1)}</span><h3 class="serif">${c}</h3></div>`)
+      .map(
+        (c, i) =>
+          `<div class="fade"><span class="mono kicker">CAP-${pad(i + 1)}</span><h3 class="serif">${c}</h3></div>`,
+      )
       .join("")}</div></section>` +
     compliance() +
     `<section class="rv"><div class="duo">${img(30, "A pallet of sealed cartons with generic markings, ready for dispatch", "ls")}${img(29, "Garments laid out on a table being checked by hand")}</div></section>`;

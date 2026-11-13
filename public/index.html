@@ -78,11 +78,11 @@
 </div>
 </section>
 
-<section class="jstatic" id="journey">
-<div class="rv"><span class="mono fade kicker">Product development</span><h2 class="serif"><span class="l"><span>From a reference</span></span><span class="l" style="--i:1"><span>to a real garment.</span></span></h2></div>
-<div class="jgrid rv"><div class="im" role="img" aria-label="A hand-drawn shirt sketch beside a printed tech pack sheet, with a pencil and tape measure"><div style="background-image:var(--im23)"></div></div>
-<ol class="jlist"><li class="fade" style="--i:0"><span class="mono">01</span><b class="serif">Reference</b><p>A sketch, sample or tech pack.</p></li><li class="fade" style="--i:1"><span class="mono">02</span><b class="serif">Development</b><p>Pattern, CAD and technical construction.</p></li><li class="fade" style="--i:2"><span class="mono">03</span><b class="serif">Sampling</b><p>A physical sample is developed.</p></li><li class="fade" style="--i:3"><span class="mono">04</span><b class="serif">Approval</b><p>Specifications and sample are reviewed.</p></li><li class="fade" style="--i:4"><span class="mono">05</span><b class="serif">Production</b><p>The approved garment moves into manufacturing.</p></li></ol></div>
-</section>
+<section class="gar" id="journey"><div class="gpin">
+<div class="gtext rv"><span class="mono fade kicker">Product development</span><h2 class="serif"><span class="l"><span>From a reference</span></span><span class="l" style="--i:1"><span>to a real garment.</span></span></h2>
+<ol id="gsteps"><li><span class="mono">01</span><b class="serif">Reference</b><p>A sketch, sample or tech pack.</p></li><li><span class="mono">02</span><b class="serif">Development</b><p>Pattern, CAD and technical construction.</p></li><li><span class="mono">03</span><b class="serif">Sampling</b><p>A physical sample is developed.</p></li><li><span class="mono">04</span><b class="serif">Approval</b><p>Specifications and sample are reviewed.</p></li><li><span class="mono">05</span><b class="serif">Production</b><p>The approved garment moves into manufacturing.</p></li></ol></div>
+<div class="gpanel"><div id="garment"></div><span class="mono gcap" id="gcap">01 · Reference</span><span class="mono ghint">Scroll</span></div>
+</div></section>
 
 <section class="one rv"><span class="mono fade" style="color:var(--umber)">Manufacturing and sourcing</span><h2 class="serif"><span class="l"><span>One partner.</span></span><span class="l" style="--i:1"><span>A wider possibility.</span></span></h2></section>
 <section class="two"><div class="dark weave rv"><span class="mono" style="color:var(--sage)">01 · In our own facility</span><div><h3 class="serif"><span class="l"><span>We manufacture.</span></span></h3><p>Woven garments produced in our own Coimbatore facility: shirts, trousers, jackets, uniforms and workwear.</p><a class="btn mono" href="/manufacturing">Explore our manufacturing</a></div></div>
@@ -102,24 +102,8 @@
 <div class="meetL rv"><span class="mono fade kicker">Meet Shravan</span><h2 class="serif"><span class="l"><span>A direct point</span></span><span class="l" style="--i:1"><span>of contact</span></span><span class="l" style="--i:2"><span>for buyers.</span></span></h2><div class="mono fade fromto" style="--i:3"><span>From</span> Shravan J.<br><span>To</span> Brands and buyers<br><span>Re</span> Your next garment</div></div>
 <div class="letter rv"><p class="scrub first">I’m Shravan J. My work sits at the intersection of fabrics, garments and manufacturing.</p><p class="fade" style="--i:1">I’ve developed hands-on experience across woven fabrics, garment construction, product development, sampling and production.</p><p class="fade" style="--i:2">Through Sreevari Apparels, I work directly with our manufacturing facility and with manufacturing partners across India to help brands find the right fabric, develop the right product and execute production to specification.</p><div class="sign fade" style="--i:3"><span class="serif">Shravan J.</span><i aria-hidden="true"></i><span class="mono">Sreevari Apparels, Coimbatore</span></div><a class="btn mono fade" style="--i:4" href="https://wa.me/918072544030" target="_blank" rel="noopener">Talk to Shravan</a></div>
 </section>
-<section class="dark weave" id="enquire"><div class="eq"><div class="eqL rv"><h2 class="serif"><span class="l"><span>What are you</span></span><span class="l" style="--i:1"><span>looking to make?</span></span></h2><p class="fade" style="margin-top:26px;max-width:46ch">Share your product idea, tech pack, reference or sample. Tell us your quantity and target market, and we’ll help determine the right manufacturing or sourcing route.</p><div class="ci2 fade"><div><span class="mono">Contact person</span>Shravan J.</div><div><span class="mono">WhatsApp</span><a href="https://wa.me/918072544030">+91 80725 44030</a></div><div><span class="mono">Factory</span>No. 399/2, Door No. 8/6, Level Crossing Road, Irugur, Coimbatore – 641103</div><div><span class="mono">Map</span><a href="https://www.google.com/maps/place/Sreevari+apparels+private+limited/@11.0116777,77.0632521,951m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3ba85714bb697449:0xd5852ed1445fb75a!8m2!3d11.0116777!4d77.065827!16s%2Fg%2F11zd4ydxxx" target="_blank" rel="noopener">Open in Google Maps →</a></div></div></div>
-<form id="f">
-<label><span class="mono">Name</span><input name="Name" required autocomplete="name"></label>
-<label><span class="mono">Company</span><input name="Company" autocomplete="organization"></label>
-<label><span class="mono">Email</span><input name="Email" type="email" required autocomplete="email"></label>
-<label><span class="mono">Phone / WhatsApp</span><input name="Phone" type="tel" autocomplete="tel"></label>
-<label class="w"><span class="mono">Country</span><input name="Country" autocomplete="country-name"></label>
-<label><span class="mono">Product category</span><select name="Category" id="cat"><option>Shirts</option><option>Trousers</option><option>Jackets</option><option>Uniforms</option><option>Workwear</option><option>Knitted Garments</option><option>Home Textiles</option><option>Fabrics</option><option>Other</option></select></label>
-<label class="w" id="catOtherWrap" hidden><span class="mono">Tell us the product</span><input id="catOther" autocomplete="off" placeholder="Type the product you need"></label>
-<label><span class="mono">Manufacturing or sourcing</span><select name="Route" id="rt"><option>Manufacturing</option><option>Sourcing</option><option>Not sure yet</option></select></label>
-<label><span class="mono">Estimated quantity</span><input name="Quantity"></label>
-<label><span class="mono">Target market</span><input name="Market"></label>
-<label class="w"><span class="mono">Project description</span><textarea name="Description" rows="3"></textarea></label>
-<label class="w" id="filesWrap"><span class="mono">Reference / tech pack (PDF or images)</span><input type="file" name="files" accept=".pdf,image/*" multiple></label>
-<label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
-<div class="w ctas"><button class="btn fill mono" type="submit">Start your project</button><a class="btn mono" href="https://wa.me/918072544030" target="_blank" rel="noopener">WhatsApp us</a></div>
-<p class="w note" id="fmsg" role="status" aria-live="polite">Up to 5 files, 10 MB each. PDF or images.</p>
-</form></div>
+<section class="dark weave" id="enquire"><div class="eq"><div class="eqL rv"><h2 class="serif"><span class="l"><span>What are you</span></span><span class="l" style="--i:1"><span>looking to make?</span></span></h2><p class="fade" style="margin-top:26px;max-width:46ch">Share your product idea, tech pack, reference or sample. Tell us your quantity and target market, and we’ll help determine the right manufacturing or sourcing route.</p><div class="ticket fade" id="ticket" aria-hidden="true"></div></div>
+<div class="bld" id="builder"></div></div>
 </section>
 
 <div class="site" role="img" aria-label="Exterior of the Sreevari manufacturing facility in Irugur, Coimbatore: a white steel-roofed building with a large open shutter"><span class="mono">Our facility · Irugur, Coimbatore</span></div>
@@ -136,6 +120,9 @@
 <script src="/js/vendor/lenis.min.js" defer></script>
 <script src="/js/content.js" defer></script>
 <script src="/js/pages.js" defer></script>
+<script src="/js/garment.js" defer></script>
+<script src="/js/enquiry.js" defer></script>
+<script src="/js/fabric.js" defer></script>
 <script src="/js/site.js" defer></script>
 </body>
 </html>

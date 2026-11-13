@@ -21,20 +21,74 @@ window.SV = {
 
   // Homepage "Made here" sequence: [title, text, short label, image, alt]
   stages: [
-    ["Fabric inspection", "Fabric is inspected, selected and approved before production begins.", "Fabric", 7, "A roll of woven fabric being unrolled and inspected"],
-    ["Pattern development / CAD", "CAD, pattern development and technical construction.", "CAD", 6, "Pattern drafting on paper beside a CAD screen"],
-    ["Sample development", "Prototype development and approval to specification.", "Sample", 5, "A sample shirt on a tailoring table"],
-    ["Fabric cutting", "Fabric preparation and cutting to the approved pattern.", "Cutting", 4, "Fabric laid out on a cutting table"],
-    ["Shirt construction", "Sewing and garment assembly.", "Construction", 3, "An operator sewing a shirt at a machine"],
-    ["Quality inspection", "In-line checking and final AQL inspection.", "Quality", 2, "A finished shirt being measured with a tape"],
-    ["Finishing and packing", "Finishing, packing and export preparation.", "Packing", 13, "Folded shirts being packed into cartons"],
+    [
+      "Fabric inspection",
+      "Fabric is inspected, selected and approved before production begins.",
+      "Fabric",
+      7,
+      "A roll of woven fabric being unrolled and inspected",
+    ],
+    [
+      "Pattern development / CAD",
+      "CAD, pattern development and technical construction.",
+      "CAD",
+      6,
+      "Pattern drafting on paper beside a CAD screen",
+    ],
+    [
+      "Sample development",
+      "Prototype development and approval to specification.",
+      "Sample",
+      5,
+      "A sample shirt on a tailoring table",
+    ],
+    [
+      "Fabric cutting",
+      "Fabric preparation and cutting to the approved pattern.",
+      "Cutting",
+      4,
+      "Fabric laid out on a cutting table",
+    ],
+    [
+      "Shirt construction",
+      "Sewing and garment assembly.",
+      "Construction",
+      3,
+      "An operator sewing a shirt at a machine",
+    ],
+    [
+      "Quality inspection",
+      "In-line checking and final AQL inspection.",
+      "Quality",
+      2,
+      "A finished shirt being measured with a tape",
+    ],
+    [
+      "Finishing and packing",
+      "Finishing, packing and export preparation.",
+      "Packing",
+      13,
+      "Folded shirts being packed into cartons",
+    ],
   ],
 
   // Manufacturing page: [image, title, text]
   manufacturing: [
-    [16, "Overview", "Woven garments are made in our own Coimbatore facility, from fabric approval through to export preparation."],
-    [6, "CAD and pattern development", "CAD, pattern development and pattern making, from sketches, tech packs, references and samples."],
-    [7, "Fabric sourcing and approval", "Fabric is sourced and approved against the buyer’s specification before production begins."],
+    [
+      16,
+      "Overview",
+      "Woven garments are made in our own Coimbatore facility, from fabric approval through to export preparation.",
+    ],
+    [
+      6,
+      "CAD and pattern development",
+      "CAD, pattern development and pattern making, from sketches, tech packs, references and samples.",
+    ],
+    [
+      7,
+      "Fabric sourcing and approval",
+      "Fabric is sourced and approved against the buyer’s specification before production begins.",
+    ],
     [4, "Cutting", "Fabric prepared and cut to the approved pattern."],
     [3, "Sewing", "Garment assembly on 120+ sewing machines."],
     [24, "Trimming", "Trims added and checked as the garment is assembled."],
@@ -75,8 +129,16 @@ window.SV = {
     ["1993", "Established in Coimbatore", "Sreevari Apparels begins manufacturing in Tamil Nadu."],
     ["Woven focus", "Specialised knowledge", "A focused understanding of woven fabrics, construction and finishing."],
     ["Own facility", "Made in Irugur", "120+ sewing machines and approximately 1,500–2,000 pieces per day."],
-    ["Compliance", "SEDEX compliant", "Our facility operates against the SMETA 4-Pillar standard and audit requirements."],
-    ["Partner network", "Wider possibility", "Knitwear, home textiles and fabrics sourced through partners across India."],
+    [
+      "Compliance",
+      "SEDEX compliant",
+      "Our facility operates against the SMETA 4-Pillar standard and audit requirements.",
+    ],
+    [
+      "Partner network",
+      "Wider possibility",
+      "Knitwear, home textiles and fabrics sourced through partners across India.",
+    ],
     ["One contact", "Shravan J.", "A dedicated point of contact from enquiry to shipment."],
   ],
 

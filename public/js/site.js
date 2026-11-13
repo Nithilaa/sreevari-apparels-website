@@ -59,7 +59,9 @@
   const observeReveals = () => $$(".rv:not(.in)").forEach((e) => io.observe(e));
 
   /* ---------- Homepage: "Made here" pinned sequence ---------- */
-  const copy = $("#copy"), frame = $("#frame"), track = $("#track");
+  const copy = $("#copy"),
+    frame = $("#frame"),
+    track = $("#track");
   SV.stages.forEach((s, i) => {
     copy.insertAdjacentHTML(
       "beforeend",
@@ -71,7 +73,9 @@
     );
     track.insertAdjacentHTML("beforeend", `<span>${pad(i + 1)} ${s[2]}</span>`);
   });
-  const stageCopy = $$(".st"), stageImg = $$(".v"), stageTick = $$("#track span");
+  const stageCopy = $$(".st"),
+    stageImg = $$(".v"),
+    stageTick = $$("#track span");
   let activeStage = -1;
   function makingScroll() {
     const r = $("#making").getBoundingClientRect();
@@ -85,8 +89,31 @@
     $("#bignum").textContent = pad(i + 1);
   }
 
+  /* ---------- Homepage: the shirt that comes together (drawn in garment.js) ---------- */
+  const gSteps = $$("#gsteps li"),
+    gNames = gSteps.map((li) => $("b", li).textContent);
+  let gActive = -1;
+  function garmentScroll() {
+    const r = $("#journey").getBoundingClientRect();
+    const p = clamp(-r.top / (r.height - innerHeight));
+    SV.garment.update(p);
+    const i = Math.min(gSteps.length - 1, Math.floor(p * gSteps.length));
+    $(".ghint").style.opacity = p > 0.03 ? 0 : 1;
+    if (i === gActive) return;
+    gActive = i;
+    gSteps.forEach((li, k) => li.classList.toggle("on", k === i));
+    $("#gcap").textContent = `${pad(i + 1)} · ${gNames[i]}`;
+  }
+  gSteps.forEach((li, k) =>
+    li.addEventListener("click", () => {
+      const r = $("#journey").getBoundingClientRect();
+      scrollToY(scrollY + r.top + ((k + 0.55) / gSteps.length) * (r.height - innerHeight), true);
+    }),
+  );
+
   /* ---------- Homepage: product gallery (scrolls sideways on desktop, swipes on phones) ---------- */
-  const hwrap = $("#hwrap"), htrack = $("#htrack");
+  const hwrap = $("#hwrap"),
+    htrack = $("#htrack");
   htrack.innerHTML = SV.products
     .map((p, i) => {
       const n = Array.isArray(p[1]) ? p[1][0] : p[1];
@@ -112,7 +139,8 @@
   });
   function scrubScroll() {
     $$(".scrub").forEach((p) => {
-      const words = $$("span", p), r = p.getBoundingClientRect();
+      const words = $$("span", p),
+        r = p.getBoundingClientRect();
       const prog = reduced ? 1 : clamp((innerHeight * 0.9 - r.top) / (innerHeight * 0.5));
       words.forEach((w, i) => w.classList.toggle("on", i < prog * words.length));
     });
@@ -155,6 +183,11 @@
     });
   }
 
+  // The floating WhatsApp button steps aside while the enquiry builder is on screen, so it never covers its buttons
+  new IntersectionObserver(([e]) => $(".sticky-wa").classList.toggle("away", e.isIntersecting), {
+    rootMargin: "0px 0px -120px 0px",
+  }).observe($("#builder"));
+
   let ticking = false;
   function onScroll() {
     if (ticking) return;
@@ -163,9 +196,10 @@
       ticking = false;
       if (!$("#home").hidden) {
         makingScroll();
+        garmentScroll();
         galleryScroll();
         heroScroll();
-              }
+      }
       scrubScroll();
       ambientScroll();
       if (!reduced) windowScroll();
@@ -175,15 +209,21 @@
   addEventListener("resize", onScroll);
 
   /* ---------- Router with a curtain transition ---------- */
-  const curtain = $("#cu"), menu = $("#mm"), menuBtn = $("#mb");
-  let shown = null, ready = false;
+  const curtain = $("#cu"),
+    menu = $("#mm"),
+    menuBtn = $("#mb");
+  let shown = null,
+    ready = false;
 
   function currentPage() {
     if (HASH_MODE) {
       const h = location.hash.slice(1);
       return h.startsWith("page-") && PAGES.includes(h.slice(5)) ? h.slice(5) : "";
     }
-    const p = location.pathname.slice(BASE.length).replace(/index\.html$/, "").replace(/^\/+|\/+$/g, "");
+    const p = location.pathname
+      .slice(BASE.length)
+      .replace(/index\.html$/, "")
+      .replace(/^\/+|\/+$/g, "");
     return PAGES.includes(p) ? p : "";
   }
 
@@ -207,7 +247,7 @@
     const target = anchor && document.getElementById(anchor);
     target && !target.hidden ? scrollToEl(target, false) : scrollToY(0, false);
     if (ready) observeReveals();
-    activeStage = -1;
+    activeStage = gActive = -1;
     onScroll();
   }
 
@@ -278,12 +318,8 @@
   });
   addEventListener("keydown", (e) => e.key === "Escape" && closeMenu());
 
-  /* ---------- Category → enquiry form ---------- */
-  function preselect(category, route) {
-    $("#cat").value = category;
-    $("#rt").value = route;
-    $("#cat").dispatchEvent(new Event("change"));
-  }
+  /* ---------- "Enquire" buttons hand the chosen product to the enquiry builder (enquiry.js) ---------- */
+  const preselect = (category, route) => SV.enquiry.select(category, route);
   document.addEventListener("click", (e) => {
     const b = e.target.closest(".enq");
     if (!b) return;
@@ -291,17 +327,19 @@
     // Homepage cards scroll to the form on the same page; Products page buttons go to Contact
     b.closest("#home") ? scrollToEl($("#enquire"), true) : navigate("contact", "enquire");
   });
-  $$("a[data-route]").forEach((a) => a.addEventListener("click", () => ($("#rt").value = a.dataset.route)));
 
   /* ---------- Pointer effects (mouse only) ---------- */
   if (fine && !reduced) {
     const dot = $("#dot");
-    let x = 0, y = 0, tx = 0, ty = 0;
+    let x = 0,
+      y = 0,
+      tx = 0,
+      ty = 0;
     addEventListener("mousemove", (e) => {
       tx = e.clientX;
       ty = e.clientY;
       dot.style.opacity = 1;
-      dot.classList.toggle("big", !!e.target.closest("a, button"));
+      dot.classList.toggle("big", !!e.target.closest("a, button, #gsteps li"));
     });
     (function follow() {
       x += (tx - x) * 0.2;
@@ -332,76 +370,6 @@
     });
   }
 
-  /* ---------- Enquiry form ---------- */
-  const form = $("#f"), msg = $("#fmsg"), submitBtn = $("button[type=submit]", form);
-  const say = (html, state = "") => {
-    msg.innerHTML = html;
-    msg.dataset.state = state;
-  };
-  const LABELS = {
-    Name: "Name", Company: "Company", Email: "Email", Phone: "Phone / WhatsApp", Country: "Country",
-    Category: "Product category", Route: "Manufacturing or sourcing", Quantity: "Estimated quantity",
-    Market: "Target market", Description: "Project description",
-  };
-  function whatsappLink(fd) {
-    let text = "*New project enquiry — Sreevari Apparels*\n\n";
-    for (const key in LABELS) {
-      const v = String(fd.get(key) || "").trim();
-      if (v) text += `*${LABELS[key]}:* ${v}\n`;
-    }
-    return `https://wa.me/${SV.whatsapp}?text=${encodeURIComponent(text)}`;
-  }
-
-  // "Other" in the category list reveals a box to type the product
-  const cat = $("#cat"), otherWrap = $("#catOtherWrap"), other = $("#catOther");
-  function syncOther() {
-    const on = cat.value === "Other";
-    otherWrap.hidden = !on;
-    other.required = on;
-  }
-  cat.addEventListener("change", syncOther);
-  form.addEventListener("reset", () => setTimeout(syncOther));
-
-  // Static hosting (GitHub Pages) has no server, so the form sends through WhatsApp
-  if (NO_SERVER) {
-    $("#filesWrap").hidden = true;
-    $("[name=Email]", form).required = false;
-    submitBtn.textContent = "Send enquiry on WhatsApp";
-    $("a.btn", form).hidden = true;
-    msg.textContent = "Your details open in WhatsApp, ready to send. Attach tech packs or photos in the chat.";
-  }
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const fd = new FormData(form);
-    if (cat.value === "Other") fd.set("Category", "Other: " + other.value.trim());
-    const wa = whatsappLink(fd);
-    const files = fd.getAll("files").filter((f) => f && f.size);
-    if (files.length > 5 || files.some((f) => f.size > 10 * 1024 * 1024))
-      return say("Attach up to 5 files of 10 MB or less each.", "error");
-
-    // Preview build has no server: hand the enquiry to WhatsApp instead.
-    if (NO_SERVER) {
-      window.open(wa, "_blank", "noopener");
-      return say("WhatsApp opened with your details. Press send there, and attach any files in the chat.", "ok");
-    }
-
-    submitBtn.disabled = true;
-    say("Sending your enquiry…");
-    try {
-      const res = await fetch("/api/enquiry", { method: "POST", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (res.status === 400 || res.status === 413 || res.status === 429)
-        return say(data.error || "Check the form and try again.", "error");
-      if (!res.ok || !data.ok) throw new Error("send failed");
-      form.reset();
-      say("Enquiry sent. Shravan will reply to you by email or WhatsApp.", "ok");
-    } catch {
-      say(`Enquiry not sent. <a href="${wa}" target="_blank" rel="noopener">Send it on WhatsApp instead →</a>`, "error");
-    } finally {
-      submitBtn.disabled = false;
-    }
-  });
-
   /* ---------- Intro, then start ---------- */
   function start() {
     document.documentElement.classList.add("ready");
@@ -418,7 +386,8 @@
     });
   // Older links used "#page-about"; send them to the page's real address
   const legacy = (location.hash.match(/^#page-(\w+)$/) || [])[1];
-  if (!HASH_MODE && PAGES.includes(legacy)) history.replaceState({}, "", BASE + (window.SV_BASE ? legacy + "/" : legacy));
+  if (!HASH_MODE && PAGES.includes(legacy))
+    history.replaceState({}, "", BASE + (window.SV_BASE ? legacy + "/" : legacy));
   render(HASH_MODE ? null : location.hash.slice(1));
   const pre = $("#pre");
   let seen = false;

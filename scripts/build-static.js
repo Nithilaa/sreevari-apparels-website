@@ -33,7 +33,7 @@ fs.writeFileSync(path.join(OUT, "site.css"), css);
 
 // A version in the stylesheet and script addresses makes browsers fetch new copies after each update
 const hash = crypto.createHash("sha1").update(css);
-for (const f of ["content.js", "pages.js", "site.js"]) hash.update(fs.readFileSync(path.join(OUT, "js", f)));
+for (const f of ["content.js", "pages.js", "garment.js", "enquiry.js", "fabric.js", "site.js"]) hash.update(fs.readFileSync(path.join(OUT, "js", f)));
 const v = hash.digest("hex").slice(0, 10);
 
 const pageLink = (slug) => (SITE ? `${slug}/` : `#page-${slug}`);

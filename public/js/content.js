@@ -149,16 +149,35 @@ window.SV = {
     pillars: ["Labour standards", "Health and safety", "Environment", "Business ethics"],
   },
 
+  // Capabilities page: [name, image, text]
   capabilities: [
-    "Fabric sourcing and approval",
-    "CAD and pattern development",
-    "Sampling and product development",
-    "Cutting and sewing",
-    "Trimming and checking",
-    "In-line quality control",
-    "Final AQL inspection",
-    "Finishing and packing",
-    "Washing support",
-    "Export preparation",
+    [
+      "Fabric sourcing and approval",
+      7,
+      "Fabric is sourced and approved against the buyer’s specification before production begins.",
+    ],
+    [
+      "CAD and pattern development",
+      6,
+      "CAD, pattern development and pattern making, from sketches, tech packs, references and samples.",
+    ],
+    ["Sampling and product development", 5, "A physical sample is developed and reviewed against the specification."],
+    ["Cutting and sewing", 4, "Fabric is cut to the approved pattern and assembled on 120+ sewing machines."],
+    ["Trimming and checking", 24, "Trims are added and checked as the garment is assembled."],
+    ["In-line quality control", 2, "Garments are checked in-line while they are being made."],
+    ["Final AQL inspection", 25, "A final AQL inspection takes place before the goods are packed."],
+    ["Finishing and packing", 13, "Garments are finished and packed to the buyer’s requirements."],
+    ["Washing support", 29, "Washing support is available as part of finishing."],
+    ["Export preparation", 30, "Packed goods are prepared for export."],
   ],
+
+  // Products page fabric picker. Illustrative options only: real fabrics and colours follow the buyer's specification.
+  fabricColours: [
+    ["White", "#f7f8fa", "#dfe3ea", "#c9d2e6"],
+    ["Light blue", "#bcd0f7", "#9db4ea", "#f4f7ff"],
+    ["Navy", "#1b2c6b", "#14224f", "#4a61b5"],
+    ["Grey", "#b9bcc4", "#a3a7b1", "#e9ebef"],
+    ["Charcoal", "#3a3f4b", "#2c303a", "#6d7482"],
+  ],
+  fabricWeaves: ["Solid", "Stripe", "Check"],
 };

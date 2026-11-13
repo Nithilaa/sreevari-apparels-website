@@ -271,9 +271,13 @@
 
   // Called by the "Enquire" buttons around the site: the product is already chosen, so start at step 2
   SV.enquiry = {
-    select(category, route) {
+    select(category, route, note) {
       state.category = category;
       state.route = route;
+      if (note) {
+        state.description = note;
+        $("[data-k=description]").value = note;
+      }
       show(1);
     },
   };

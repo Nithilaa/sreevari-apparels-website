@@ -23,6 +23,7 @@ npm start          # http://localhost:3000
 | `public/js/pages.js` | Turns `content.js` into the About, Manufacturing, Products, Sourcing, Capabilities and Contact pages |
 | `public/js/garment.js` | The shirt that is sketched, laid out as pattern pieces, sewn and multiplied as you scroll |
 | `public/js/enquiry.js` | The four-step enquiry builder and its WhatsApp / server sending |
+| `public/js/inner.js` | Inner-page behaviour: the fabric and colour picker (Products), the stage list with a fixed photo (Manufacturing), the capability viewer, the About thread |
 | `public/js/site.js` | Routing, page transitions, scroll animations, cursor effects |
 | `public/css/site.css` | All styles. Image paths are the `--imN` variables near the top |
 | `public/images/` | 34 WebP images and the company logo (`logo.png`) |

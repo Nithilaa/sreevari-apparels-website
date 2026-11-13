@@ -237,7 +237,8 @@
   function swap(page, anchor) {
     $$("main").forEach((m) => (m.hidden = m.id !== (page ? "page-" + page : "home")));
     // The enquiry form and the facility photo close the homepage and the Contact page only
-    $("#enquire").hidden = $(".site").hidden = $("#shravan").hidden = !(page === "" || page === "contact");
+    $("#enquire").hidden = $(".site").hidden = !(page === "" || page === "contact");
+    $("#shravan").hidden = !(page === "" || page === "contact" || page === "about");
     document.title = SV.titles[page];
     $$("nav .links a, #mm a").forEach((a) => {
       const on = page !== "" && a.getAttribute("href").replace(/^#page-|^\.?\/|\/$/g, "") === page;
@@ -248,6 +249,7 @@
     target && !target.hidden ? scrollToEl(target, false) : scrollToY(0, false);
     if (ready) observeReveals();
     activeStage = gActive = -1;
+    if (SV.innerRefresh) SV.innerRefresh();
     onScroll();
   }
 
@@ -319,13 +321,14 @@
   addEventListener("keydown", (e) => e.key === "Escape" && closeMenu());
 
   /* ---------- "Enquire" buttons hand the chosen product to the enquiry builder (enquiry.js) ---------- */
-  const preselect = (category, route) => SV.enquiry.select(category, route);
+  // Used by every "Enquire" button: choose the product in the builder, then bring the builder into view
+  SV.goEnquire = (category, route, note, fromHome) => {
+    SV.enquiry.select(category, route, note);
+    fromHome ? scrollToEl($("#enquire"), true) : navigate("contact", "enquire");
+  };
   document.addEventListener("click", (e) => {
     const b = e.target.closest(".enq");
-    if (!b) return;
-    preselect(b.dataset.cat, b.dataset.route);
-    // Homepage cards scroll to the form on the same page; Products page buttons go to Contact
-    b.closest("#home") ? scrollToEl($("#enquire"), true) : navigate("contact", "enquire");
+    if (b) SV.goEnquire(b.dataset.cat, b.dataset.route, "", !!b.closest("#home"));
   });
 
   /* ---------- Pointer effects (mouse only) ---------- */

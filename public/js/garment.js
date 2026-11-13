@@ -205,5 +205,24 @@
   }
 
   window.SV.garment = { update };
+
+  // A finished shirt on its own, for the fabric and colour picker on the Products page.
+  // Colours come from the --fab / --fab2 / --stripe variables on the <svg>; data-pattern picks the weave.
+  window.SV.shirtMarkup = () => {
+    const part = (id) => PIECES.find((x) => x[0] === id)[1];
+    const cloth = (id, cls = "") => `<path class="c ${cls}" d="${part(id)}"/>`;
+    return `<svg class="cshirt" viewBox="70 56 460 572" role="img" aria-label="Illustration of a shirt in the chosen fabric and colour">
+  <defs>
+    <pattern id="wStripe" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" class="pf"/><rect x="6" width="3" height="16" class="ps"/></pattern>
+    <pattern id="wCheck" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" class="pf"/><rect x="8" width="5" height="22" class="ps"/><rect y="8" width="22" height="5" class="ps"/></pattern>
+  </defs>
+  ${cloth("back", "under")}${cloth("stand", "under")}${cloth("sleeveL")}${cloth("sleeveR")}${cloth("cuffL")}${cloth("cuffR")}${cloth("frontL")}${cloth("frontR")}${cloth("placket")}${cloth("collarL")}${cloth("collarR")}
+  <g class="cpocket">${cloth("pocket")}<path class="cs" d="${SEAMS[SEAMS.length - 1]}"/></g>
+  <g class="cstitch">${SEAMS.slice(0, -1)
+    .map((d) => `<path class="cs" d="${d}"/>`)
+    .join("")}</g>
+  <g class="cbuttons">${BUTTONS.map((y) => `<circle cx="300" cy="${y}" r="4.6"/>`).join("")}</g>
+</svg>`;
+  };
   update(0);
 })();

@@ -16,9 +16,9 @@ const PUBLIC = path.join(__dirname, "..", "public");
 const OUT = path.join(__dirname, "..", "dist", "static");
 
 // Public address of the site, ending in "/". Set SITE_URL for a custom domain;
-// on GitHub Actions it is worked out from the repository name.
+// on GitHub Actions the workflow passes the address from the Pages settings (falling back to the repository name).
 const [owner, repo] = (process.env.GITHUB_REPOSITORY || "").split("/");
-const SITE = process.env.SITE_URL ? process.env.SITE_URL.replace(/\/?$/, "/") : owner ? `https://${owner.toLowerCase()}.github.io/${repo}/` : "";
+const SITE = process.env.SITE_URL ? process.env.SITE_URL.replace(/^http:/, "https:").replace(/\/?$/, "/") : owner ? `https://${owner.toLowerCase()}.github.io/${repo}/` : "";
 const BASE = SITE ? new URL(SITE).pathname : "";
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 

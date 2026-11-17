@@ -22,7 +22,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      # Reads the site's public address from the repository's Pages settings, so the build follows
+      # whatever is set there: the github.io address now, the custom domain once one is entered.
+      - id: pages
+        uses: actions/configure-pages@v5
       - run: node scripts/build-static.js
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/static
